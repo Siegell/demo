@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<body>
+<form action="/{{contractID}}/edit" method="post">
+    <label for="contractor">Contractor:</label>
+    <input type="text" name="contractor" value="{{contractor}}" />
+    <label for="contractDate">Contract Date:</label>
+    <input type="date" name="contractDate" value="{{contractDate}}" />
+    <label for="beginDate">Begin Date:</label>
+    <input type="date" name="beginDate" value="{{beginDate}}" />
+    <label for="endDate">End Date:</label>
+    <input type="date" name="endDate" value="{{endDate}}" />
+    <label for="totalCost">Total cost:</label>
+    <input type="number" name="totalCost" value="{{totalCost}}" />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>
+</html>
