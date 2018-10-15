@@ -33,7 +33,7 @@ public class StageController {
     }
 
     @RequestMapping("/{contractID}/stages/add")
-    public ModelAndView addform(@PathVariable long contractID) {
+    public ModelAndView add(@PathVariable long contractID) {
         Stage stage = new Stage();
         stage.setContract(contractsRepository.findById(contractID).get());
         stagesRepository.save(stage);
@@ -44,11 +44,11 @@ public class StageController {
     public ModelAndView editform(@PathVariable long contractID, @PathVariable long stageID) {
         Stage stage = stagesRepository.findById(stageID).get();
         Map<String, Object> model = new HashMap<>();
-        model.put("stageName", stage.getName());
-        model.put("beginDate", stage.getBeginDate());
-        model.put("endDate", stage.getEndDate());
-        model.put("cost", stage.getCost());
-        model.put("paymentDate", stage.getPaymentDate());
+        model.put("stageName", (stage.getName() != null ? stage.getName() : ""));
+        model.put("beginDate", (stage.getBeginDate() != null ? stage.getBeginDate() : ""));
+        model.put("endDate", (stage.getEndDate() != null ? stage.getEndDate() : ""));
+        model.put("cost", (stage.getCost() != null ? stage.getCost() : ""));
+        model.put("paymentDate", (stage.getPaymentDate() != null ? stage.getPaymentDate() : ""));
         return new ModelAndView("stagesEdit", model);
     }
 
