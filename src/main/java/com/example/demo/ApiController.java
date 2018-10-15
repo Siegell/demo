@@ -27,6 +27,7 @@ public class ApiController {
 
     @GetMapping("/stages/{contractID}")
     public Iterable<Stage> getContracts(@PathVariable long contractID){
-        return stagesRepository.findStagesByContractId(contractID);
+        Contract contract = contractsRepository.findById(contractID).get();
+        return stagesRepository.findStagesByContract(contract);
     }
 }

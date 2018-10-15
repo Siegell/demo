@@ -7,16 +7,39 @@
 <table id="main_table" border = '1' width="70%">
     <tr>
         <td>id</td>
-        <td>contractor</td>
-        <td>contract date</td>
-        <td>start date</td>
+        <td>name</td>
+        <td>begin date</td>
         <td>end date</td>
-        <td>total cost</td>
-        <td>stages</td>
+        <td>cost</td>
+        <td>payment date</td>
         <td>edit</td>
         <td>delete</td>
     </tr>
-    <script type="text/javascript" src="js/stages.js"></script>
+    <script type="text/javascript">
+        function add_table(data) {
+            return '<td>'
+                    + data +
+                    '</td>'
+        }
+
+        fetch("/api/stages/{{contractID}}")
+                .then(response => response.json())
+                .then(stages => {
+                    stages.forEach(stage => {
+                        const el = document.createElement('tr');
+                        a = add_table(stage.id)
+                        a += add_table(stage.name)
+                        a += add_table(stage.beginDate)
+                        a += add_table(stage.endDate)
+                        a += add_table(stage.cost)
+                        a += add_table(stage.paymentDate)
+                        a += add_table('<a href="../../contract/' + {{contractID}} +'/stage/' + stage.id + '/edit/">edit</a>')
+                        a += add_table('<a href="../../contract/' + {{contractID}} +'/stage/' + stage.id + '/delete/">delete</a>')
+                        el.innerHTML = a + '</tr>'
+                        document.querySelector('#main_table').append(el)
+                    })
+                })
+    </script>
 </table>
 </body>
 </html>

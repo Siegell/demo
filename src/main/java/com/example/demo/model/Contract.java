@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.util.Set;
 @Entity
 public class Contract {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String contractor;
@@ -18,6 +20,7 @@ public class Contract {
     private Long totalCost;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract")
+    @JsonIgnore
     private Set<Stage> stages;
 
     public Long getId() {
