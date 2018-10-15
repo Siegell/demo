@@ -19,7 +19,7 @@ public class Contract {
     private LocalDate endDate;
     private Long totalCost;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Stage> stages;
 
