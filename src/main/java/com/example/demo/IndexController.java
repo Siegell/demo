@@ -66,4 +66,10 @@ public class IndexController {
         contractsRepository.save(contract);
         return new ModelAndView("redirect:/" + contract.getId() + "/edit");
     }
+
+    @RequestMapping("/{contractID}/delete")
+    public  ModelAndView delete(@PathVariable long contractID){
+        contractsRepository.deleteById(contractID);
+        return new ModelAndView("redirect:/");
+    }
 }
