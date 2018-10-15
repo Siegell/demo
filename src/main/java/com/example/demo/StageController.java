@@ -4,13 +4,13 @@ import com.example.demo.model.ContractsRepository;
 import com.example.demo.model.Stage;
 import com.example.demo.model.StagesRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/contract")
@@ -37,13 +37,39 @@ public class StageController {
         Stage stage = new Stage();
         stage.setContract(contractsRepository.findById(contractID).get());
         stagesRepository.save(stage);
-        StringBuilder path = new StringBuilder("redirect:/contract/").append(contractID).append("/stages/").append(stage.getId()).append("/edit");
-        return new ModelAndView(path.toString());
+        return new ModelAndView("redirect:/contract/" + contractID + "/stages/" + stage.getId() + "/edit");
     }
 
     @GetMapping("/{contractID}/stages/{stageID}/edit")
     public ModelAndView editform(@PathVariable long contractID, @PathVariable long stageID) {
-        return new ModelAndView("stages");
+        Stage stage = stagesRepository.findById(stageID).get();
+        Map<String, Object> model = new HashMap<>();
+        model.put("stageName", stage.getName());
+        model.put("beginDate", stage.getBeginDate());
+        model.put("endDate", stage.getEndDate());
+        model.put("cost", stage.getCost());
+        model.put("paymentDate", stage.getPaymentDate());
+        return new ModelAndView("stagesEdit", model);
+    }
+
+    @PostMapping("/{contractID}/stages/{stageID}/edit")
+    public ModelAndView save(@PathVariable long contractID, @PathVariable long stageID, @RequestParam Map<String, String> map) {
+        Stage stage = stagesRepository.findById(stageID).get();
+        stage.setName(map.getOrDefault("name", null));
+        String beginDateStr = map.getOrDefault("beginDate", null);
+        if (!Objects.equals(beginDateStr, ""))
+            stage.setBeginDate(LocalDate.parse(beginDateStr));
+        String endDateStr = map.getOrDefault("endDate", null);
+        if (!Objects.equals(endDateStr, ""))
+            stage.setEndDate(LocalDate.parse(endDateStr));
+        String paymentDateStr = map.getOrDefault("paymentDate", null);
+        if (!Objects.equals(paymentDateStr, ""))
+            stage.setPaymentDate(LocalDate.parse(paymentDateStr));
+        String costStr = map.getOrDefault("cost", "0");
+        if (!Objects.equals(costStr, ""))
+            stage.setCost(Long.parseLong(costStr));
+        stagesRepository.save(stage);
+        return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
 
 }

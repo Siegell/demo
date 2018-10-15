@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <body>
+        <form action="/contract/{{contractID}}/stages/{{stageID}}/edit" method="post">
+            <label for="name">Name:</label>
+            <input type="text" name="name" />
+            <label for="beginDate">Begin Date:</label>
+            <input type="date" name="beginDate" />
+            <label for="endDate">End Date:</label>
+            <input type="date" name="endDate" />
+            <label for="cost">Cost:</label>
+            <input type="number" name="cost" />
+            <label for="paymentDate">PaymentDate:</label>
+            <input type="date" name="paymentDate" />
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </body>
+</html>

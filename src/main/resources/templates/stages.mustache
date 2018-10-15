@@ -33,13 +33,16 @@
                         a += add_table(stage.endDate)
                         a += add_table(stage.cost)
                         a += add_table(stage.paymentDate)
-                        a += add_table('<a href="../../contract/' + {{contractID}} +'/stage/' + stage.id + '/edit/">edit</a>')
-                        a += add_table('<a href="../../contract/' + {{contractID}} +'/stage/' + stage.id + '/delete/">delete</a>')
+                        a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/edit/">edit</a>')
+                        a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/delete/">delete</a>')
                         el.innerHTML = a + '</tr>'
                         document.querySelector('#main_table').append(el)
                     })
                 })
     </script>
 </table>
+<p><a href="/contract/{{contractID}}/stages/add">Add stage</a></p>
+<p><a href="/">Back</a></p>
+
 </body>
 </html>
