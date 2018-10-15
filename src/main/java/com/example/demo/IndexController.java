@@ -2,17 +2,15 @@ package com.example.demo;
 
 import com.example.demo.model.Contract;
 import com.example.demo.model.ContractsRepository;
-import com.example.demo.model.Stage;
 import com.example.demo.model.StagesRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Controller
 public class IndexController {
@@ -27,19 +25,6 @@ public class IndexController {
 
     @GetMapping("/")
     public ModelAndView index() {
-        Contract contract = new Contract();
-        contract.setContractDate(LocalDate.now());
-        contract.setContractor("Danicheleos");
-        contractsRepository.save(contract);
-        Stage stage = new Stage();
-        stage.setContract(contract);
-        stage.setBeginDate(LocalDate.now());
-        stage.setName("test");
-        stagesRepository.save(stage);
-        Set<Stage> stages = new LinkedHashSet<>();
-        stages.add(stage);
-        contract.setStages(stages);
-        contractsRepository.save(contract);
         return new ModelAndView("index");
     }
 
@@ -73,5 +58,12 @@ public class IndexController {
             contract.setTotalCost(Long.parseLong(totalCostStr));
         contractsRepository.save(contract);
         return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping("/add")
+    public ModelAndView add(){
+        Contract contract = new Contract();
+        contractsRepository.save(contract);
+        return new ModelAndView("redirect:/" + contract.getId() + "/edit");
     }
 }
