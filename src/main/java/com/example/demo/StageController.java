@@ -72,4 +72,10 @@ public class StageController {
         return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
 
+    @RequestMapping("/{contractID}/stages/{stageID}/delete")
+    public ModelAndView delete(@PathVariable long contractID, @PathVariable long stageID){
+        stagesRepository.deleteById(stageID);
+        return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
+    }
+
 }
