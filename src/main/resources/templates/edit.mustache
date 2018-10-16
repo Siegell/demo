@@ -3,15 +3,15 @@
 <body>
 <form action="/{{contractID}}/edit" method="post">
     <label for="contractor">Contractor:</label>
-    <input type="text" name="contractor" value="{{contractor}}" />
+    <input type="text" name="contractor" value="{{contractor}}" required/>
     <label for="contractDate">Contract Date:</label>
-    <input type="date" name="contractDate" value="{{contractDate}}" />
+    <input type="date" name="contractDate" value="{{contractDate}}" required/>
     <label for="beginDate">Begin Date:</label>
-    <input type="date" name="beginDate" value="{{beginDate}}" />
+    <input type="date" name="beginDate" value="{{beginDate}}" required/>
     <label for="endDate">End Date:</label>
-    <input type="date" name="endDate" value="{{endDate}}" min ="{{beginDate}}" />
+    <input type="date" name="endDate" value="{{endDate}}" min ="{{beginDate}}" required/>
     <label for="totalCost">Total cost:</label>
-    <input type="number" name="totalCost" value="{{totalCost}}" />
+    <input type="number" name="totalCost" value="{{totalCost}}" min="0" required/>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </body>
