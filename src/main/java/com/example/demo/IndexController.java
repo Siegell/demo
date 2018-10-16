@@ -32,11 +32,11 @@ public class IndexController {
     public ModelAndView editform(@PathVariable long contractID){
         Contract contract = contractsRepository.findById(contractID).get();
         Map<String, Object> model = new HashMap<>();
-        model.put("contractor", (contract.getContractor() != null ? contract.getContractor() : ""));
-        model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : ""));
-        model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : ""));
-        model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : ""));
-        model.put("totalCost", (contract.getTotalCost() != null ? contract.getTotalCost() : ""));
+        model.put("contractor", (contract.getContractor() != null ? contract.getContractor() : "contractor"));
+        model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
+        model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
+        model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
+        model.put("totalCost", (contract.getTotalCost() != null ? contract.getTotalCost() : 0));
         return new ModelAndView("edit", model);
     }
 

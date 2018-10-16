@@ -7,12 +7,11 @@
             <label for="beginDate">Begin Date:</label>
             <input type="date" name="beginDate" value="{{beginDate}}" />
             <label for="endDate">End Date:</label>
-            <input type="date" name="endDate" value="{{endDate}}" />
+            <input type="date" name="endDate" value="{{endDate}}" min="{{beginDate}}" />
             <label for="cost">Cost:</label>
             <input type="number" name="cost" value="{{cost}}" />
             <label for="paymentDate">PaymentDate:</label>
             <input type="date" name="paymentDate" value="{{paymentDate}}" />
-
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </body>

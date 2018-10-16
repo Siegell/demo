@@ -44,11 +44,11 @@ public class StageController {
     public ModelAndView editform(@PathVariable long contractID, @PathVariable long stageID) {
         Stage stage = stagesRepository.findById(stageID).get();
         Map<String, Object> model = new HashMap<>();
-        model.put("stageName", (stage.getName() != null ? stage.getName() : ""));
-        model.put("beginDate", (stage.getBeginDate() != null ? stage.getBeginDate() : ""));
-        model.put("endDate", (stage.getEndDate() != null ? stage.getEndDate() : ""));
-        model.put("cost", (stage.getCost() != null ? stage.getCost() : ""));
-        model.put("paymentDate", (stage.getPaymentDate() != null ? stage.getPaymentDate() : ""));
+        model.put("stageName", (stage.getName() != null ? stage.getName() : "name"));
+        model.put("beginDate", (stage.getBeginDate() != null ? stage.getBeginDate() : LocalDate.now()));
+        model.put("endDate", (stage.getEndDate() != null ? stage.getEndDate() : LocalDate.now()));
+        model.put("cost", (stage.getCost() != null ? stage.getCost() : "0"));
+        model.put("paymentDate", (stage.getPaymentDate() != null ? stage.getPaymentDate() : LocalDate.now()));
         return new ModelAndView("stagesEdit", model);
     }
 
