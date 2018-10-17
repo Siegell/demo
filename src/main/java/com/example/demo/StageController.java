@@ -17,10 +17,12 @@ import java.util.Objects;
 public class StageController {
     private final ContractsRepository contractsRepository;
     private final StagesRepository stagesRepository;
+    private final StageValidator stageValidator;
 
-    public StageController(ContractsRepository contractsRepository, StagesRepository stagesRepository) {
+    public StageController(ContractsRepository contractsRepository, StagesRepository stagesRepository, StageValidator stageValidator) {
         this.contractsRepository = contractsRepository;
         this.stagesRepository = stagesRepository;
+        this.stageValidator = stageValidator;
     }
 
     @GetMapping("/{contractID}/stages")
@@ -68,12 +70,14 @@ public class StageController {
         String costStr = map.getOrDefault("cost", "0");
         if (!Objects.equals(costStr, ""))
             stage.setCost(Long.parseLong(costStr));
-        stagesRepository.save(stage);
+
+        if (stageValidator.validate(stage))
+            stagesRepository.save(stage);
         return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
 
     @RequestMapping("/{contractID}/stages/{stageID}/delete")
-    public ModelAndView delete(@PathVariable long contractID, @PathVariable long stageID){
+    public ModelAndView delete(@PathVariable long contractID, @PathVariable long stageID) {
         stagesRepository.deleteById(stageID);
         return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
