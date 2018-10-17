@@ -57,7 +57,7 @@ public class StageController {
     @PostMapping("/{contractID}/stages/{stageID}/edit")
     public ModelAndView save(@PathVariable long contractID, @PathVariable long stageID, @RequestParam Map<String, String> map) {
         Stage stage = stagesRepository.findById(stageID).get();
-        stage.setName(map.getOrDefault("name", null));
+        stage.setName(map.getOrDefault("stageName", null));
         String beginDateStr = map.getOrDefault("beginDate", null);
         if (!Objects.equals(beginDateStr, ""))
             stage.setBeginDate(LocalDate.parse(beginDateStr));
@@ -73,6 +73,16 @@ public class StageController {
 
         if (stageValidator.validate(stage))
             stagesRepository.save(stage);
+        else {
+            Map<String, Object> model = new HashMap<>();
+            model.put("stageName", (stage.getName() != null ? stage.getName() : "name"));
+            model.put("beginDate", (stage.getBeginDate() != null ? stage.getBeginDate() : LocalDate.now()));
+            model.put("endDate", (stage.getEndDate() != null ? stage.getEndDate() : LocalDate.now()));
+            model.put("cost", (stage.getCost() != null ? stage.getCost() : "0"));
+            model.put("paymentDate", (stage.getPaymentDate() != null ? stage.getPaymentDate() : LocalDate.now()));
+            model.put("error", "Input data is not correct");
+            return new ModelAndView("stagesEdit", model);
+        }
         return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
 

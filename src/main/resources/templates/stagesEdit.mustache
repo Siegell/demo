@@ -2,8 +2,8 @@
 <html lang="en">
     <body>
         <form action="/contract/{{contractID}}/stages/{{stageID}}/edit" method="post">
-            <label for="name">Name:</label>
-            <input type="text" name="name" value="{{stageName}}" required/>
+            <label for="stageName">Name:</label>
+            <input type="text" name="stageName" value="{{stageName}}" required/>
             <label for="beginDate">Begin Date:</label>
             <input type="date" name="beginDate" value="{{beginDate}}" required/>
             <label for="endDate">End Date:</label>
@@ -14,5 +14,11 @@
             <input type="date" name="paymentDate" value="{{paymentDate}}" required/>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+    {{#error}}
+        <p>{{error}}</p>
+    {{/error}}
+
+    <p><a href="/contract/{{contractID}}/stages/">Back</a></p>
+
     </body>
 </html>

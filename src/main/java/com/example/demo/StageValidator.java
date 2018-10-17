@@ -16,7 +16,11 @@ public class StageValidator {
 
     public boolean validate(Stage stage) {
         Set<Stage> stages = stagesRepository.findStagesByContract(stage.getContract());
-        return dateValidate(stage, stages);
+        return simpleDateValidation(stage) && dateValidate(stage, stages);
+    }
+
+    private boolean simpleDateValidation(Stage stage) {
+        return stage.getBeginDate().isBefore(stage.getEndDate()) || stage.getBeginDate().isEqual(stage.getEndDate());
     }
 
     private boolean dateValidate(Stage stage, Set<Stage> stages) {
@@ -28,6 +32,4 @@ public class StageValidator {
         }
         return true;
     }
-
-
 }
