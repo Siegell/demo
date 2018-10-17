@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.model.Contract;
 import com.example.demo.model.ContractsRepository;
 import com.example.demo.model.Stage;
 import com.example.demo.model.StagesRepository;
@@ -71,8 +72,12 @@ public class StageController {
         if (!Objects.equals(costStr, ""))
             stage.setCost(Long.parseLong(costStr));
 
-        if (stageValidator.validate(stage))
+        if (stageValidator.validate(stage)) {
             stagesRepository.save(stage);
+            Contract contract = contractsRepository.findById(contractID).get();
+            contract.recalculateCost();
+            contractsRepository.save(contract);
+        }
         else {
             Map<String, Object> model = new HashMap<>();
             model.put("stageName", (stage.getName() != null ? stage.getName() : "name"));
