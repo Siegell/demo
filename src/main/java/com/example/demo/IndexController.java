@@ -36,7 +36,7 @@ public class IndexController {
         model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
         model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
         model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
-        model.put("totalCost", (contract.getTotalCost() != null ? contract.getTotalCost() : 0));
+        model.put("expectedTotalCost", (contract.getExpectedTotalCost() != null ? contract.getExpectedTotalCost() : 0));
         return new ModelAndView("edit", model);
     }
 
@@ -55,7 +55,8 @@ public class IndexController {
             contract.setContractDate(LocalDate.parse(contractDateStr));
         String totalCostStr = map.getOrDefault("totalCost", "0");
         if (!Objects.equals(totalCostStr, ""))
-            contract.setTotalCost(Long.parseLong(totalCostStr));
+            contract.setExpectedTotalCost(Long.parseLong(totalCostStr));
+        contract.recalculateCost();
         contractsRepository.save(contract);
         return new ModelAndView("redirect:/");
     }
@@ -70,6 +71,14 @@ public class IndexController {
     @RequestMapping("/{contractID}/delete")
     public  ModelAndView delete(@PathVariable long contractID){
         contractsRepository.deleteById(contractID);
+        return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping("/{contractID}/recalc")
+    public ModelAndView recalc(@PathVariable long contractID){
+        Contract contract = contractsRepository.findById(contractID).get();
+        contract.recalculateCost();
+        contractsRepository.save(contract);
         return new ModelAndView("redirect:/");
     }
 }

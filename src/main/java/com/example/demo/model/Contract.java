@@ -17,7 +17,8 @@ public class Contract {
     private LocalDate contractDate;
     private LocalDate beginDate;
     private LocalDate endDate;
-    private Long totalCost;
+    private Long expectedTotalCost;
+    private Long calculatedTotalCost = 0L;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -63,12 +64,12 @@ public class Contract {
         this.endDate = endDate;
     }
 
-    public Long getTotalCost() {
-        return totalCost;
+    public Long getExpectedTotalCost() {
+        return expectedTotalCost;
     }
 
-    public void setTotalCost(Long totalCost) {
-        this.totalCost = totalCost;
+    public void setExpectedTotalCost(Long expectedTotalCost) {
+        this.expectedTotalCost = expectedTotalCost;
     }
 
     public Set<Stage> getStages() {
@@ -77,6 +78,18 @@ public class Contract {
 
     public void setStages(Set<Stage> stages) {
         this.stages = stages;
+    }
+
+    public Long getCalculatedTotalCost() {
+        return calculatedTotalCost;
+    }
+
+    public void recalculateCost() {
+        long s = 0;
+        for (Stage stage : stages) {
+            s += stage.getCost();
+        }
+        calculatedTotalCost = s;
     }
 
     @Override
