@@ -1,10 +1,12 @@
-package com.example.demo;
+package com.example.demo.controllers;
 
-import com.example.demo.model.Contract;
-import com.example.demo.model.ContractsRepository;
-import com.example.demo.model.Stage;
-import com.example.demo.model.StagesRepository;
+import com.example.demo.domain.Contract;
+import com.example.demo.domain.Stage;
+import com.example.demo.repositories.ContractsRepository;
+import com.example.demo.repositories.StagesRepository;
+import com.example.demo.validators.StageValidator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/contract")
@@ -70,15 +73,14 @@ public class StageController {
             stage.setPaymentDate(LocalDate.parse(paymentDateStr));
         String costStr = map.getOrDefault("cost", "0");
         if (!Objects.equals(costStr, ""))
-            stage.setCost(Long.parseLong(costStr));
+            stage.setCost(Double.parseDouble(costStr));
 
         if (stageValidator.validate(stage)) {
             stagesRepository.save(stage);
             Contract contract = contractsRepository.findById(contractID).get();
             contract.recalculateCost();
             contractsRepository.save(contract);
-        }
-        else {
+        } else {
             Map<String, Object> model = new HashMap<>();
             model.put("stageName", (stage.getName() != null ? stage.getName() : "name"));
             model.put("beginDate", (stage.getBeginDate() != null ? stage.getBeginDate() : LocalDate.now()));
@@ -97,4 +99,12 @@ public class StageController {
         return new ModelAndView("redirect:/contract/" + contractID + "/stages/");
     }
 
+    @RequestMapping("/{contractID}/chart")
+    public String chart(@PathVariable long contractID, Model model) {
+        Contract contract = contractsRepository.findById(contractID).get();
+        Set<Stage> stages = stagesRepository.findStagesByContract(contract);
+        model.addAttribute("stages", stages);
+        model.addAttribute("contractID", contractID);
+        return "stagesChart";
+    }
 }
