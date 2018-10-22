@@ -2,28 +2,26 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="siegell (generated)" id="1539976900280-1">
+    <changeSet author="siegell (generated)" id="1540213095764-1">
         <createTable tableName="contract">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="begin_date" type="date"/>
+            <column name="calculated_total_cost" type="DOUBLE"/>
             <column name="contract_date" type="date"/>
             <column name="contractor" type="VARCHAR(255)"/>
             <column name="end_date" type="date"/>
-            <column name="total_cost" type="BIGINT"/>
-            <column name="calculated_cost" type="BIGINT"/>
-            <column name="expected_total_cost" type="BIGINT"/>
-            <column name="calculated_total_cost" type="BIGINT"/>
+            <column name="expected_total_cost" type="DOUBLE"/>
         </createTable>
     </changeSet>
-    <changeSet author="siegell (generated)" id="1539976900280-2">
+    <changeSet author="siegell (generated)" id="1540213095764-2">
         <createTable tableName="stage">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
             <column name="begin_date" type="date"/>
-            <column name="cost" type="BIGINT"/>
+            <column name="cost" type="DOUBLE"/>
             <column name="end_date" type="date"/>
             <column name="name" type="VARCHAR(255)"/>
             <column name="payment_date" type="date"/>
@@ -32,12 +30,15 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="siegell (generated)" id="1539976900280-3">
+    <changeSet author="siegell (generated)" id="1540213095764-3">
         <createIndex indexName="FKp6difyxpp0w5ju1wk2wgfck4q" tableName="stage">
             <column name="contract_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="siegell (generated)" id="1539976900280-4">
-        <addForeignKeyConstraint baseColumnNames="contract_id" baseTableName="stage" constraintName="FKp6difyxpp0w5ju1wk2wgfck4q" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="contract" validate="true"/>
+    <changeSet author="siegell (generated)" id="1540213095764-4">
+        <addForeignKeyConstraint baseColumnNames="contract_id" baseTableName="stage"
+                                 constraintName="FKp6difyxpp0w5ju1wk2wgfck4q" deferrable="false"
+                                 initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="contract" validate="true"/>
     </changeSet>
 </databaseChangeLog>
