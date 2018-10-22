@@ -1,6 +1,8 @@
 package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,80 +11,36 @@ import java.util.Set;
 
 @Entity
 public class Contract {
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
+    @Setter
     private String contractor;
+    @Getter
+    @Setter
     private LocalDate contractDate;
+    @Getter
+    @Setter
     private LocalDate beginDate;
+    @Getter
+    @Setter
     private LocalDate endDate;
+    @Getter
+    @Setter
     private Double expectedTotalCost;
+    @Getter
     private Double calculatedTotalCost = 0D;
 
+    @Getter
+    @Setter
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Stage> stages;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContractor() {
-        return contractor;
-    }
-
-    public void setContractor(String contractor) {
-        this.contractor = contractor;
-    }
-
-    public LocalDate getContractDate() {
-        return contractDate;
-    }
-
-    public void setContractDate(LocalDate contractDate) {
-        this.contractDate = contractDate;
-    }
-
-    public LocalDate getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(LocalDate beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public Double getExpectedTotalCost() {
-        return expectedTotalCost;
-    }
-
-    public void setExpectedTotalCost(Double expectedTotalCost) {
-        this.expectedTotalCost = expectedTotalCost;
-    }
-
-    public Set<Stage> getStages() {
-        return stages;
-    }
-
-    public void setStages(Set<Stage> stages) {
-        this.stages = stages;
-    }
-
-    public Double getCalculatedTotalCost() {
-        return calculatedTotalCost;
-    }
 
     public void recalculateCost() {
         double s = 0;
