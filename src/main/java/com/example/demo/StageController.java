@@ -70,7 +70,7 @@ public class StageController {
             stage.setPaymentDate(LocalDate.parse(paymentDateStr));
         String costStr = map.getOrDefault("cost", "0");
         if (!Objects.equals(costStr, ""))
-            stage.setCost(Long.parseLong(costStr));
+            stage.setCost(Double.parseDouble(costStr));
 
         if (stageValidator.validate(stage)) {
             stagesRepository.save(stage);

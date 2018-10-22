@@ -53,9 +53,9 @@ public class IndexController {
         String contractDateStr = map.getOrDefault("contractDate", null);
         if (!Objects.equals(contractDateStr, ""))
             contract.setContractDate(LocalDate.parse(contractDateStr));
-        String totalCostStr = map.getOrDefault("totalCost", "0");
+        String totalCostStr = map.getOrDefault("expectedTotalCost", "0");
         if (!Objects.equals(totalCostStr, ""))
-            contract.setExpectedTotalCost(Long.parseLong(totalCostStr));
+            contract.setExpectedTotalCost(Double.parseDouble(totalCostStr));
         contract.recalculateCost();
         contractsRepository.save(contract);
         return new ModelAndView("redirect:/");

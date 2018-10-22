@@ -16,7 +16,7 @@ public class Stage {
     private String name;
     private LocalDate beginDate;
     private LocalDate endDate;
-    private Long cost;
+    private Double cost;
     private LocalDate paymentDate;
 
     @JsonIgnore
@@ -56,11 +56,11 @@ public class Stage {
         this.endDate = endDate;
     }
 
-    public Long getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(Long cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
