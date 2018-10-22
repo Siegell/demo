@@ -1,0 +1,35 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['timeline']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+            dataTable.addColumn({type: 'string', id: 'Term'});
+            dataTable.addColumn({type: 'string', id: 'Name'});
+            dataTable.addColumn({type: 'date', id: 'Start'});
+            dataTable.addColumn({type: 'date', id: 'End'});
+
+            {{#stages}}
+                dataTable.addRows([['{{id}}', '{{name}}', new Date("{{beginDate}}"), new Date("{{endDate}}")]]);
+            {{/stages}}
+
+            var options = {
+                timeline: {
+                    colorByRowLabel: true,
+                    showRowLabels: false
+                },
+                backgroundColor: '#ffd'
+            };
+            chart.draw(dataTable, options);
+        } </script>
+</head>
+<body>
+<div id="timeline" style="height: 180px;"></div>
+<p><a href="/contract/{{contractID}}/stages/">Back</a></p>
+</body>
+</html>
