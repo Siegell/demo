@@ -1,7 +1,7 @@
-package com.example.demo;
+package com.example.demo.validators;
 
-import com.example.demo.model.Stage;
-import com.example.demo.model.StagesRepository;
+import com.example.demo.domain.Stage;
+import com.example.demo.repositories.StagesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

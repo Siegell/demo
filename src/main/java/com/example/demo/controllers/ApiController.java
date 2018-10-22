@@ -1,9 +1,9 @@
-package com.example.demo;
+package com.example.demo.controllers;
 
-import com.example.demo.model.Contract;
-import com.example.demo.model.ContractsRepository;
-import com.example.demo.model.Stage;
-import com.example.demo.model.StagesRepository;
+import com.example.demo.domain.Contract;
+import com.example.demo.domain.Stage;
+import com.example.demo.repositories.ContractsRepository;
+import com.example.demo.repositories.StagesRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
