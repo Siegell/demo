@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="siegell (generated)" id="1539976900280-1">
+        <createTable tableName="contract">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="begin_date" type="date"/>
+            <column name="contract_date" type="date"/>
+            <column name="contractor" type="VARCHAR(255)"/>
+            <column name="end_date" type="date"/>
+            <column name="total_cost" type="BIGINT"/>
+            <column name="calculated_cost" type="BIGINT"/>
+            <column name="expected_total_cost" type="BIGINT"/>
+            <column name="calculated_total_cost" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="siegell (generated)" id="1539976900280-2">
+        <createTable tableName="stage">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="begin_date" type="date"/>
+            <column name="cost" type="BIGINT"/>
+            <column name="end_date" type="date"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="payment_date" type="date"/>
+            <column name="contract_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="siegell (generated)" id="1539976900280-3">
+        <createIndex indexName="FKp6difyxpp0w5ju1wk2wgfck4q" tableName="stage">
+            <column name="contract_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="siegell (generated)" id="1539976900280-4">
+        <addForeignKeyConstraint baseColumnNames="contract_id" baseTableName="stage" constraintName="FKp6difyxpp0w5ju1wk2wgfck4q" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="contract" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
