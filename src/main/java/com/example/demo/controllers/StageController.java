@@ -5,6 +5,7 @@ import com.example.demo.domain.Stage;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import com.example.demo.validators.StageValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,12 @@ import java.util.Set;
 @Controller
 @RequestMapping("/contract")
 public class StageController {
-    private final ContractsRepository contractsRepository;
-    private final StagesRepository stagesRepository;
-    private final StageValidator stageValidator;
+    @Autowired
+    private ContractsRepository contractsRepository;
+    @Autowired
+    private StagesRepository stagesRepository;
+    @Autowired
+    private StageValidator stageValidator;
 
     public StageController(ContractsRepository contractsRepository, StagesRepository stagesRepository, StageValidator stageValidator) {
         this.contractsRepository = contractsRepository;

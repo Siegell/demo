@@ -2,13 +2,15 @@ package com.example.demo.validators;
 
 import com.example.demo.domain.Stage;
 import com.example.demo.repositories.StagesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
 public class StageValidator {
-    final private StagesRepository stagesRepository;
+    @Autowired
+    private StagesRepository stagesRepository;
 
     public StageValidator(StagesRepository stagesRepository) {
         this.stagesRepository = stagesRepository;

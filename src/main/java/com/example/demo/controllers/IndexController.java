@@ -4,6 +4,7 @@ import com.example.demo.domain.Contract;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import com.example.demo.validators.ContractsValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,9 +17,12 @@ import java.util.Objects;
 @Controller
 public class IndexController {
 
-    private final ContractsRepository contractsRepository;
-    private final StagesRepository stagesRepository;
-    private final ContractsValidator contractsValidator;
+    @Autowired
+    private ContractsRepository contractsRepository;
+    @Autowired
+    private StagesRepository stagesRepository;
+    @Autowired
+    private ContractsValidator contractsValidator;
 
     public IndexController(ContractsRepository contractsRepository, StagesRepository stagesRepository, ContractsValidator contractsValidator) {
         this.contractsRepository = contractsRepository;
