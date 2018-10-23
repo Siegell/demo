@@ -8,33 +8,19 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 public class Stage {
-
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Getter
-    @Setter
     private String name;
-    @Getter
-    @Setter
     private LocalDate beginDate;
-    @Getter
-    @Setter
     private LocalDate endDate;
-    @Getter
-    @Setter
     private Double cost;
-    @Getter
-    @Setter
     private LocalDate paymentDate;
 
-    @Getter
-    @Setter
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "contract_id", nullable = false)

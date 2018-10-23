@@ -9,34 +9,19 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 public class Contract {
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Getter
-    @Setter
     private String contractor;
-    @Getter
-    @Setter
     private LocalDate contractDate;
-    @Getter
-    @Setter
     private LocalDate beginDate;
-    @Getter
-    @Setter
     private LocalDate endDate;
-    @Getter
-    @Setter
     private Double expectedTotalCost;
-    @Getter
     private Double calculatedTotalCost = 0D;
-
-    @Getter
-    @Setter
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Stage> stages;
