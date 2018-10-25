@@ -1,7 +1,9 @@
 package com.example.demo.controllers;
 
 import com.example.demo.domain.Contract;
+import com.example.demo.domain.Contractor;
 import com.example.demo.domain.Stage;
+import com.example.demo.repositories.ContractorsRepository;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +19,28 @@ public class ApiController {
     private ContractsRepository contractsRepository;
     @Autowired
     private StagesRepository stagesRepository;
+    @Autowired
+    private ContractorsRepository contractorsRepository;
 
-    public ApiController(ContractsRepository contractsRepository, StagesRepository stagesRepository) {
+    public ApiController(ContractsRepository contractsRepository, StagesRepository stagesRepository, ContractorsRepository contractorsRepository) {
         this.contractsRepository = contractsRepository;
         this.stagesRepository = stagesRepository;
+        this.contractorsRepository = contractorsRepository;
     }
 
     @GetMapping("/contracts")
-    public Iterable<Contract> getContracts(){
+    public Iterable<Contract> getContracts() {
         return contractsRepository.findAll();
     }
 
     @GetMapping("/stages/{contractID}")
-    public Iterable<Stage> getContracts(@PathVariable long contractID){
+    public Iterable<Stage> getContracts(@PathVariable long contractID) {
         Contract contract = contractsRepository.findById(contractID).get();
         return stagesRepository.findStagesByContract(contract);
+    }
+
+    @GetMapping("/contractors")
+    public Iterable<Contractor> getContractors(){
+        return contractorsRepository.findAll();
     }
 }
