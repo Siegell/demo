@@ -48,6 +48,7 @@
             <column name="id" autoIncrement="true" type="BIGINT">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="name" type="VARCHAR(255)"/>
             <column name="address" type="VARCHAR(255)"/>
             <column name="phone" type="VARCHAR(10)"/>
         </createTable>

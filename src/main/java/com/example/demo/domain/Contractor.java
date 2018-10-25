@@ -15,6 +15,7 @@ public class Contractor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String address;
     private String phone;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contractor", cascade = CascadeType.REMOVE)
