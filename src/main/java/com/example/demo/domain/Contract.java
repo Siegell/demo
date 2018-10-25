@@ -16,7 +16,6 @@ public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String contractor;
     private LocalDate contractDate;
     private LocalDate beginDate;
     private LocalDate endDate;
@@ -25,6 +24,10 @@ public class Contract {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Stage> stages;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "contractor_id", nullable = false)
+    private Contractor contractor;
 
 
     public void recalculateCost() {

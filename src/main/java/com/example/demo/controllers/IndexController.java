@@ -39,7 +39,6 @@ public class IndexController {
     public ModelAndView editform(@PathVariable long contractID) {
         Contract contract = contractsRepository.findById(contractID).get();
         Map<String, Object> model = new HashMap<>();
-        model.put("contractor", (contract.getContractor() != null ? contract.getContractor() : "contractor"));
         model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
         model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
         model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
@@ -50,7 +49,6 @@ public class IndexController {
     @PostMapping("/{contractID}/edit")
     public ModelAndView save(@PathVariable long contractID, @RequestParam Map<String, String> map) {
         Contract contract = contractsRepository.findById(contractID).get();
-        contract.setContractor(map.getOrDefault("contractor", null));
         String beginDateStr = map.getOrDefault("beginDate", null);
         if (!Objects.equals(beginDateStr, ""))
             contract.setBeginDate(LocalDate.parse(beginDateStr));
@@ -69,7 +67,6 @@ public class IndexController {
             contractsRepository.save(contract);
         } else {
             Map<String, Object> model = new HashMap<>();
-            model.put("contractor", (contract.getContractor() != null ? contract.getContractor() : "contractor"));
             model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
             model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
             model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
