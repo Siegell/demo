@@ -34,4 +34,5 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     runtimeOnly('com.h2database:h2')
     implementation ('org.mariadb.jdbc:mariadb-java-client:2.3.0')
+    compile 'com.itextpdf:itextg:5.5.10'
 }

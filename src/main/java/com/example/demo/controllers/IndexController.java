@@ -5,12 +5,17 @@ import com.example.demo.domain.Contractor;
 import com.example.demo.repositories.ContractorsRepository;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
+import com.example.demo.util.ContractsExporter;
 import com.example.demo.validators.ContractsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -25,11 +30,14 @@ public class IndexController {
     private ContractorsRepository contractorsRepository;
     @Autowired
     private ContractsValidator contractsValidator;
+    @Autowired
+    private ContractsExporter contractsExporter;
 
-    public IndexController(ContractsRepository contractsRepository, StagesRepository stagesRepository, ContractsValidator contractsValidator) {
+    public IndexController(ContractsRepository contractsRepository, StagesRepository stagesRepository, ContractsValidator contractsValidator, ContractsExporter contractsExporter) {
         this.contractsRepository = contractsRepository;
         this.stagesRepository = stagesRepository;
         this.contractsValidator = contractsValidator;
+        this.contractsExporter = contractsExporter;
     }
 
     @GetMapping("/")
@@ -109,9 +117,25 @@ public class IndexController {
         return new ModelAndView("redirect:/");
     }
 
-    @PostMapping("/export")
-    public ModelAndView export(@RequestParam Map<String, String> map){
-
-        return new ModelAndView("redirect:/");
+    @GetMapping(value = "/export")
+    public String export(@RequestParam(name = "export", required = false) List<Long> contractIDs, @RequestParam(name = "exportType") String exportType, HttpServletResponse response) {
+        if(contractIDs != null) {
+            List<Contract> contracts = contractsRepository.findAllById(contractIDs);
+            File file = contractsExporter.createFile(contracts, exportType);
+            try {
+                InputStream in = new FileInputStream(file);
+                if(Objects.equals(exportType, "PDF")){
+                    response.setContentType("application/pdf");
+                } else {
+                    response.setContentType("text/csv");
+                }
+                response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
+                response.setHeader("Content-Length", String.valueOf(file.length()));
+                FileCopyUtils.copy(in, response.getOutputStream());
+            } catch (IOException e) {
+            }
+            return null;
+        }
+        else return "redirect:/";
     }
 }

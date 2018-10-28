@@ -38,7 +38,7 @@ public class ContractorsController {
     }
 
     @PostMapping("{contractorID}/edit/{from}")
-    public ModelAndView save(@PathVariable Long contractorID, @PathVariable String from,@RequestParam Map<String, String> map) {
+    public ModelAndView save(@PathVariable Long contractorID, @PathVariable String from, @RequestParam Map<String, String> map) {
         Contractor contractor = contractorsRepository.findById(contractorID).get();
         String name = map.getOrDefault("name", "name");
         if (!Objects.equals(name, ""))
@@ -50,7 +50,7 @@ public class ContractorsController {
         if (!Objects.equals(address, ""))
             contractor.setAddress(address);
         contractorsRepository.save(contractor);
-        if(Objects.equals(from, "index")) {
+        if (Objects.equals(from, "index")) {
             return new ModelAndView("redirect:/contractors");
         } else {
             return new ModelAndView("redirect:/" + from + "/edit");
@@ -61,7 +61,7 @@ public class ContractorsController {
     public ModelAndView add(@PathVariable String from) {
         Contractor contractor = new Contractor();
         contractorsRepository.save(contractor);
-        if(from == null){
+        if (from == null) {
             from = "index";
         }
         return new ModelAndView("redirect:/contractors/" + contractor.getId() + "/edit/" + from);
