@@ -22,22 +22,23 @@ public class ContractorsController {
     }
 
     @GetMapping("")
-    public ModelAndView allContractors(){
+    public ModelAndView allContractors() {
         return new ModelAndView("contractorIndex");
     }
 
-    @GetMapping("{contractorID}/edit")
-    public ModelAndView editForm(@PathVariable Long contractorID){
+    @GetMapping("{contractorID}/edit/{from}")
+    public ModelAndView editForm(@PathVariable Long contractorID, @PathVariable String from) {
         Contractor contractor = contractorsRepository.findById(contractorID).get();
         Map<String, Object> model = new HashMap<>();
         model.put("name", (contractor.getName() != null ? contractor.getName() : "name"));
         model.put("address", (contractor.getAddress() != null ? contractor.getAddress() : "address"));
         model.put("phone", (contractor.getPhone() != null ? contractor.getPhone() : "phone"));
+        model.put("from", from);
         return new ModelAndView("contractorEdit", model);
     }
 
-    @PostMapping("{contractorID}/edit")
-    public ModelAndView save(@PathVariable Long contractorID, @RequestParam Map<String, String> map){
+    @PostMapping("{contractorID}/edit/{from}")
+    public ModelAndView save(@PathVariable Long contractorID, @PathVariable String from,@RequestParam Map<String, String> map) {
         Contractor contractor = contractorsRepository.findById(contractorID).get();
         String name = map.getOrDefault("name", "name");
         if (!Objects.equals(name, ""))
@@ -49,14 +50,21 @@ public class ContractorsController {
         if (!Objects.equals(address, ""))
             contractor.setAddress(address);
         contractorsRepository.save(contractor);
-        return new ModelAndView("redirect:/contractors");
+        if(Objects.equals(from, "index")) {
+            return new ModelAndView("redirect:/contractors");
+        } else {
+            return new ModelAndView("redirect:/" + from + "/edit");
+        }
     }
 
-    @RequestMapping("/add")
-    public ModelAndView add(){
+    @RequestMapping("/add/{from}")
+    public ModelAndView add(@PathVariable String from) {
         Contractor contractor = new Contractor();
         contractorsRepository.save(contractor);
-        return new ModelAndView("redirect:/contractors/" + contractor.getId() + "/edit");
+        if(from == null){
+            from = "index";
+        }
+        return new ModelAndView("redirect:/contractors/" + contractor.getId() + "/edit/" + from);
     }
 
     @RequestMapping("/{contractorID}/delete")

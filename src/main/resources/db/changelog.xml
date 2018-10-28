@@ -10,9 +10,7 @@
             <column name="begin_date" type="date"/>
             <column name="calculated_total_cost" type="DOUBLE"/>
             <column name="contract_date" type="date"/>
-            <column name="contractor_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
+            <column name="contractor_id" type="BIGINT"/>
             <column name="end_date" type="date"/>
             <column name="expected_total_cost" type="DOUBLE"/>
         </createTable>

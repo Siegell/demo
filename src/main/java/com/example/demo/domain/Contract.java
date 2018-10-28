@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +25,14 @@ public class Contract {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Stage> stages;
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "contractor_id", nullable = false)
+    @JoinColumn(name = "contractor_id")
     private Contractor contractor;
 
+    @JsonGetter("contractor")
+    public String getContractorName(){
+        return contractor == null ? "null" : contractor.getName();
+    }
 
     public void recalculateCost() {
         double s = 0;

@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import com.example.demo.domain.Contract;
+import com.example.demo.domain.Contractor;
+import com.example.demo.repositories.ContractorsRepository;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import com.example.demo.validators.ContractsValidator;
@@ -10,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class IndexController {
@@ -21,6 +21,8 @@ public class IndexController {
     private ContractsRepository contractsRepository;
     @Autowired
     private StagesRepository stagesRepository;
+    @Autowired
+    private ContractorsRepository contractorsRepository;
     @Autowired
     private ContractsValidator contractsValidator;
 
@@ -39,6 +41,12 @@ public class IndexController {
     public ModelAndView editform(@PathVariable long contractID) {
         Contract contract = contractsRepository.findById(contractID).get();
         Map<String, Object> model = new HashMap<>();
+        List<Contractor> contractors = contractorsRepository.findAll();
+        List<String> names = new LinkedList<>();
+        for (Contractor contractor : contractors) {
+            names.add(contractor.getName());
+        }
+        model.put("contractorNames", names);
         model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
         model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
         model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
@@ -62,6 +70,10 @@ public class IndexController {
         if (!Objects.equals(totalCostStr, ""))
             contract.setExpectedTotalCost(Double.parseDouble(totalCostStr));
         contract.recalculateCost();
+
+        String contractorName = map.get("contractorName");
+        Contractor contractor = contractorsRepository.findByName(contractorName);
+        contract.setContractor(contractor);
 
         if (contractsValidator.validate(contract)) {
             contractsRepository.save(contract);
