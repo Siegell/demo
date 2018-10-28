@@ -108,4 +108,10 @@ public class IndexController {
         contractsRepository.save(contract);
         return new ModelAndView("redirect:/");
     }
+
+    @PostMapping("/export")
+    public ModelAndView export(@RequestParam Map<String, String> map){
+
+        return new ModelAndView("redirect:/");
+    }
 }

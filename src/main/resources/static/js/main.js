@@ -9,18 +9,19 @@ fetch("/api/contracts")
     .then(contracts => {
         contracts.forEach(contract => {
             const el = document.createElement('tr');
-            a = add_table(contract.id)
-            a += add_table(contract.contractor)
-            a += add_table(contract.contractDate)
-            a += add_table(contract.beginDate)
-            a += add_table(contract.endDate)
-            a += add_table(contract.expectedTotalCost)
-            a += add_table(contract.calculatedTotalCost)
-            a += add_table('<a href="../../' + contract.id + '/recalc/">recalculate</a>')
-            a += add_table('<a href="../../contract/' + contract.id + '/stages/">stages</a>')
-            a += add_table('<a href="../../' + contract.id + '/edit/">edit</a>')
-            a += add_table('<a href="../../' + contract.id + '/delete/">delete</a>')
-            el.innerHTML = a + '</tr>'
-            document.querySelector('#main_table').append(el)
+            a = add_table('<input type="checkbox" name="export" value="'+contract.id+'">')
+            a += add_table(contract.id);
+            a += add_table(contract.contractor);
+            a += add_table(contract.contractDate);
+            a += add_table(contract.beginDate);
+            a += add_table(contract.endDate);
+            a += add_table(contract.expectedTotalCost);
+            a += add_table(contract.calculatedTotalCost);
+            a += add_table('<a href="../../' + contract.id + '/recalc/">recalculate</a>');
+            a += add_table('<a href="../../contract/' + contract.id + '/stages/">stages</a>');
+            a += add_table('<a href="../../' + contract.id + '/edit/">edit</a>');
+            a += add_table('<a href="../../' + contract.id + '/delete/">delete</a>');
+            el.innerHTML = a + '</tr>';
+            document.querySelector('#main_table').append(el);
         })
     })
