@@ -13,7 +13,7 @@ a = add_table(contractor.id);
 a += add_table(contractor.name);
 a += add_table(contractor.address);
 a += add_table(contractor.phone);
-a += add_table('<a href="../../contractors/' + contractor.id + '/edit/">edit</a>');
+a += add_table('<a href="../../contractors/' + contractor.id + '/edit/index">edit</a>');
 a += add_table('<a href="../../contractors/' + contractor.id + '/delete/">delete</a>');
 el.innerHTML = a + '</tr>';
 document.querySelector('#main_table').append(el);

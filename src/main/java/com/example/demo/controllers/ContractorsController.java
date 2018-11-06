@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.domain.Contractor;
 import com.example.demo.repositories.ContractorsRepository;
+import com.example.demo.validators.ContractorsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,12 @@ import java.util.Objects;
 public class ContractorsController {
     @Autowired
     private ContractorsRepository contractorsRepository;
+    @Autowired
+    private ContractorsValidator contractorsValidator;
 
-    public ContractorsController(ContractorsRepository contractorsRepository) {
+    public ContractorsController(ContractorsRepository contractorsRepository, ContractorsValidator contractorsValidator) {
         this.contractorsRepository = contractorsRepository;
+        this.contractorsValidator = contractorsValidator;
     }
 
     @GetMapping("")
@@ -49,7 +53,17 @@ public class ContractorsController {
         String address = map.getOrDefault("address", "address");
         if (!Objects.equals(address, ""))
             contractor.setAddress(address);
-        contractorsRepository.save(contractor);
+        if (contractorsValidator.validate(contractor, false)) {
+            contractorsRepository.save(contractor);
+        } else {
+            Map<String, Object> model = new HashMap<>();
+            model.put("name", (contractor.getName() != null ? contractor.getName() : "name"));
+            model.put("address", (contractor.getAddress() != null ? contractor.getAddress() : "address"));
+            model.put("phone", (contractor.getPhone() != null ? contractor.getPhone() : "phone"));
+            model.put("error", "Contractor with this name already exists");
+            model.put("from", from);
+            return new ModelAndView("contractorEdit", model);
+        }
         if (Objects.equals(from, "index")) {
             return new ModelAndView("redirect:/contractors");
         } else {
@@ -82,7 +96,17 @@ public class ContractorsController {
         String address = map.getOrDefault("address", "address");
         if (!Objects.equals(address, ""))
             contractor.setAddress(address);
-        contractorsRepository.save(contractor);
+        if (contractorsValidator.validate(contractor, true)) {
+            contractorsRepository.save(contractor);
+        } else {
+            Map<String, Object> model = new HashMap<>();
+            model.put("name", "name");
+            model.put("address", "address");
+            model.put("phone", "phone");
+            model.put("from", from);
+            model.put("error", "Contractor with this name already exists");
+            return new ModelAndView("contractorsAdd", model);
+        }
         if (Objects.equals(from, "index")) {
             return new ModelAndView("redirect:/contractors");
         } else {

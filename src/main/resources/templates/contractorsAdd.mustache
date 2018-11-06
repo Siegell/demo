@@ -10,5 +10,8 @@
     <input type="text" name="address" value="{{address}}" required/>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{{#error}}
+    <p>{{error}}</p>
+{{/error}}
 </body>
 </html>
