@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <body>
-<form action="/{{contractID}}/edit" method="post">
+<form action="/add" method="post">
     <label for="contractor">Contractor:</label>
     <select name="contractorName" required>
         <option disabled>Change contractor</option>
@@ -19,7 +19,7 @@
     <input type="number" step="0.01" name="expectedTotalCost" value="{{expectedTotalCost}}" min="0" required/>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-<p><a href="/contractors/add/{{contractID}}">Add new contractor</a></p>
+<p><a href="/contractors/add/add">Add new contractor</a></p>
 <p><a href="/">Back</a></p>
 </body>
 </html>

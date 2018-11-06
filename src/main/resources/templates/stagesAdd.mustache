@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<body>
+<form action="/contract/{{contractID}}/stages/add" method="post">
+    <label for="stageName">Name:</label>
+    <input type="text" name="stageName" value="{{stageName}}" required/>
+    <label for="beginDate">Begin Date:</label>
+    <input type="date" name="beginDate" value="{{beginDate}}" required/>
+    <label for="endDate">End Date:</label>
+    <input type="date" name="endDate" value="{{endDate}}" min="{{beginDate}}" required/>
+    <label for="cost">Cost:</label>
+    <input type="number" step="0.01" name="cost" value="{{cost}}" min="0" required/>
+    <label for="paymentDate">PaymentDate:</label>
+    <input type="date" name="paymentDate" value="{{paymentDate}}" required/>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{{#error}}
+    <p>{{error}}</p>
+{{/error}}
+
+<p><a href="/contract/{{contractID}}/stages/">Back</a></p>
+
+</body>
+</html>

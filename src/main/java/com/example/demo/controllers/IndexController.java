@@ -96,11 +96,53 @@ public class IndexController {
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping("/add")
+    @GetMapping("/add")
     public ModelAndView add() {
+        Map<String, Object> model = new HashMap<>();
+        List<Contractor> contractors = contractorsRepository.findAll();
+        List<String> names = new LinkedList<>();
+        for (Contractor contractor : contractors) {
+            names.add(contractor.getName());
+        }
+        model.put("contractorNames", names);
+        model.put("contractDate", LocalDate.now());
+        model.put("beginDate", LocalDate.now());
+        model.put("endDate", LocalDate.now());
+        model.put("expectedTotalCost", 0);
+        return new ModelAndView("add", model);
+    }
+
+    @PostMapping("/add")
+    public ModelAndView addSaving(@RequestParam Map<String, String> map) {
         Contract contract = new Contract();
-        contractsRepository.save(contract);
-        return new ModelAndView("redirect:/" + contract.getId() + "/edit");
+        String beginDateStr = map.getOrDefault("beginDate", null);
+        if (!Objects.equals(beginDateStr, ""))
+            contract.setBeginDate(LocalDate.parse(beginDateStr));
+        String endDateStr = map.getOrDefault("endDate", null);
+        if (!Objects.equals(endDateStr, ""))
+            contract.setEndDate(LocalDate.parse(endDateStr));
+        String contractDateStr = map.getOrDefault("contractDate", null);
+        if (!Objects.equals(contractDateStr, ""))
+            contract.setContractDate(LocalDate.parse(contractDateStr));
+        String totalCostStr = map.getOrDefault("expectedTotalCost", "0");
+        if (!Objects.equals(totalCostStr, ""))
+            contract.setExpectedTotalCost(Double.parseDouble(totalCostStr));
+
+        String contractorName = map.get("contractorName");
+        Contractor contractor = contractorsRepository.findByName(contractorName);
+        contract.setContractor(contractor);
+
+        if (contractsValidator.validate(contract)) {
+            contractsRepository.save(contract);
+        } else {
+            Map<String, Object> model = new HashMap<>();
+            model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
+            model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
+            model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
+            model.put("expectedTotalCost", (contract.getExpectedTotalCost() != null ? contract.getExpectedTotalCost() : 0));
+            return new ModelAndView("/add", model);
+        }
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping("/{contractID}/delete")
@@ -117,14 +159,14 @@ public class IndexController {
         return new ModelAndView("redirect:/");
     }
 
-    @GetMapping(value = "/export")
+    @GetMapping("/export")
     public String export(@RequestParam(name = "export", required = false) List<Long> contractIDs, @RequestParam(name = "exportType") String exportType, HttpServletResponse response) {
-        if(contractIDs != null) {
+        if (contractIDs != null) {
             List<Contract> contracts = contractsRepository.findAllById(contractIDs);
             File file = contractsExporter.createFile(contracts, exportType);
             try {
                 InputStream in = new FileInputStream(file);
-                if(Objects.equals(exportType, "PDF")){
+                if (Objects.equals(exportType, "PDF")) {
                     response.setContentType("application/pdf");
                 } else {
                     response.setContentType("text/csv");
@@ -135,7 +177,6 @@ public class IndexController {
             } catch (IOException e) {
             }
             return null;
-        }
-        else return "redirect:/";
+        } else return "redirect:/";
     }
 }

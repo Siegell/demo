@@ -57,14 +57,41 @@ public class ContractorsController {
         }
     }
 
-    @RequestMapping("/add/{from}")
+    @GetMapping("/add/{from}")
     public ModelAndView add(@PathVariable String from) {
-        Contractor contractor = new Contractor();
-        contractorsRepository.save(contractor);
         if (from == null) {
             from = "index";
         }
-        return new ModelAndView("redirect:/contractors/" + contractor.getId() + "/edit/" + from);
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", "name");
+        model.put("address", "address");
+        model.put("phone", "phone");
+        model.put("from", from);
+        return new ModelAndView("contractorsAdd", model);
+    }
+
+    @PostMapping("/add/{from}")
+    public ModelAndView addSaving(@PathVariable String from, @RequestParam Map<String, String> map) {
+        Contractor contractor = new Contractor();
+        String name = map.getOrDefault("name", "name");
+        if (!Objects.equals(name, ""))
+            contractor.setName(name);
+        String phone = map.getOrDefault("phone", "phone");
+        if (!Objects.equals(phone, ""))
+            contractor.setPhone(phone);
+        String address = map.getOrDefault("address", "address");
+        if (!Objects.equals(address, ""))
+            contractor.setAddress(address);
+        contractorsRepository.save(contractor);
+        if (Objects.equals(from, "index")) {
+            return new ModelAndView("redirect:/contractors");
+        } else {
+            if (Objects.equals(from, "add")) {
+                return new ModelAndView("redirect:/" + from);
+            } else {
+                return new ModelAndView("redirect:/" + from + "/edit");
+            }
+        }
     }
 
     @RequestMapping("/{contractorID}/delete")
