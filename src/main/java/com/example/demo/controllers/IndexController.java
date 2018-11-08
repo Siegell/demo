@@ -6,9 +6,9 @@ import com.example.demo.repositories.ContractorsRepository;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import com.example.demo.util.ContractsExporter;
+import com.example.demo.util.Modelers.IndexBuilder;
 import com.example.demo.validators.ContractsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +32,8 @@ public class IndexController {
     private ContractsValidator contractsValidator;
     @Autowired
     private ContractsExporter contractsExporter;
+    @Autowired
+    private IndexBuilder indexBuilder;
 
     public IndexController(ContractsRepository contractsRepository, StagesRepository stagesRepository, ContractsValidator contractsValidator, ContractsExporter contractsExporter) {
         this.contractsRepository = contractsRepository;
@@ -48,49 +50,17 @@ public class IndexController {
     @GetMapping("/{contractID}/edit")
     public ModelAndView editform(@PathVariable long contractID) {
         Contract contract = contractsRepository.findById(contractID).get();
-        Map<String, Object> model = new HashMap<>();
-        List<Contractor> contractors = contractorsRepository.findAll();
-        List<String> names = new LinkedList<>();
-        for (Contractor contractor : contractors) {
-            names.add(contractor.getName());
-        }
-        model.put("contractorNames", names);
-        model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
-        model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
-        model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
-        model.put("expectedTotalCost", (contract.getExpectedTotalCost() != null ? contract.getExpectedTotalCost() : 0));
+        Map<String, Object> model = indexBuilder.buildModel(contract);
         return new ModelAndView("edit", model);
     }
 
     @PostMapping("/{contractID}/edit")
-    public ModelAndView save(@PathVariable long contractID, @RequestParam Map<String, String> map) {
-        Contract contract = contractsRepository.findById(contractID).get();
-        String beginDateStr = map.getOrDefault("beginDate", null);
-        if (!Objects.equals(beginDateStr, ""))
-            contract.setBeginDate(LocalDate.parse(beginDateStr));
-        String endDateStr = map.getOrDefault("endDate", null);
-        if (!Objects.equals(endDateStr, ""))
-            contract.setEndDate(LocalDate.parse(endDateStr));
-        String contractDateStr = map.getOrDefault("contractDate", null);
-        if (!Objects.equals(contractDateStr, ""))
-            contract.setContractDate(LocalDate.parse(contractDateStr));
-        String totalCostStr = map.getOrDefault("expectedTotalCost", "0");
-        if (!Objects.equals(totalCostStr, ""))
-            contract.setExpectedTotalCost(Double.parseDouble(totalCostStr));
-        contract.recalculateCost();
-
-        String contractorName = map.get("contractorName");
-        Contractor contractor = contractorsRepository.findByName(contractorName);
-        contract.setContractor(contractor);
-
+    public ModelAndView save(@PathVariable long contractID, @ModelAttribute(name = "beginDate") String beginDate, @ModelAttribute(name = "contractorName") String contractorName, @ModelAttribute(name = "expectedTotalCost") String totalCost, @ModelAttribute(name = "endDate") String endDate, @ModelAttribute(name = "contractDate") String contractDate) {
+        Contract contract = indexBuilder.buildContract(contractID, LocalDate.parse(beginDate), LocalDate.parse(endDate), LocalDate.parse(contractDate), Double.parseDouble(totalCost), contractorName);
         if (contractsValidator.validate(contract)) {
             contractsRepository.save(contract);
         } else {
-            Map<String, Object> model = new HashMap<>();
-            model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
-            model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
-            model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
-            model.put("expectedTotalCost", (contract.getExpectedTotalCost() != null ? contract.getExpectedTotalCost() : 0));
+            Map<String, Object> model = indexBuilder.buildModel(contract);
             return new ModelAndView("/" + contractID + "/edit", model);
         }
         return new ModelAndView("redirect:/");
@@ -98,48 +68,17 @@ public class IndexController {
 
     @GetMapping("/add")
     public ModelAndView add() {
-        Map<String, Object> model = new HashMap<>();
-        List<Contractor> contractors = contractorsRepository.findAll();
-        List<String> names = new LinkedList<>();
-        for (Contractor contractor : contractors) {
-            names.add(contractor.getName());
-        }
-        model.put("contractorNames", names);
-        model.put("contractDate", LocalDate.now());
-        model.put("beginDate", LocalDate.now());
-        model.put("endDate", LocalDate.now());
-        model.put("expectedTotalCost", 0);
+        Map<String, Object> model = indexBuilder.buildModel();
         return new ModelAndView("add", model);
     }
 
     @PostMapping("/add")
-    public ModelAndView addSaving(@RequestParam Map<String, String> map) {
-        Contract contract = new Contract();
-        String beginDateStr = map.getOrDefault("beginDate", null);
-        if (!Objects.equals(beginDateStr, ""))
-            contract.setBeginDate(LocalDate.parse(beginDateStr));
-        String endDateStr = map.getOrDefault("endDate", null);
-        if (!Objects.equals(endDateStr, ""))
-            contract.setEndDate(LocalDate.parse(endDateStr));
-        String contractDateStr = map.getOrDefault("contractDate", null);
-        if (!Objects.equals(contractDateStr, ""))
-            contract.setContractDate(LocalDate.parse(contractDateStr));
-        String totalCostStr = map.getOrDefault("expectedTotalCost", "0");
-        if (!Objects.equals(totalCostStr, ""))
-            contract.setExpectedTotalCost(Double.parseDouble(totalCostStr));
-
-        String contractorName = map.get("contractorName");
-        Contractor contractor = contractorsRepository.findByName(contractorName);
-        contract.setContractor(contractor);
-
+    public ModelAndView addSaving(@ModelAttribute(name = "beginDate") String beginDate, @ModelAttribute(name = "contractorName") String contractorName, @ModelAttribute(name = "expectedTotalCost") String totalCost, @ModelAttribute(name = "endDate") String endDate, @ModelAttribute(name = "contractDate") String contractDate) {
+        Contract contract = indexBuilder.buildContract(LocalDate.parse(beginDate), LocalDate.parse(endDate), LocalDate.parse(contractDate), Double.parseDouble(totalCost), contractorName);
         if (contractsValidator.validate(contract)) {
             contractsRepository.save(contract);
         } else {
-            Map<String, Object> model = new HashMap<>();
-            model.put("contractDate", (contract.getContractDate() != null ? contract.getContractDate() : LocalDate.now()));
-            model.put("beginDate", (contract.getBeginDate() != null ? contract.getBeginDate() : LocalDate.now()));
-            model.put("endDate", (contract.getEndDate() != null ? contract.getEndDate() : LocalDate.now()));
-            model.put("expectedTotalCost", (contract.getExpectedTotalCost() != null ? contract.getExpectedTotalCost() : 0));
+            Map<String, Object> model = indexBuilder.buildModel(contract);
             return new ModelAndView("/add", model);
         }
         return new ModelAndView("redirect:/");
