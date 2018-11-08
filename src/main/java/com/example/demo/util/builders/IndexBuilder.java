@@ -26,6 +26,12 @@ public class IndexBuilder {
         model.put("beginDate", LocalDate.now());
         model.put("endDate", LocalDate.now());
         model.put("expectedTotalCost", 0);
+        List<Contractor> contractors = contractorsRepository.findAll();
+        List<String> names = new LinkedList<>();
+        for (Contractor contractor : contractors) {
+            names.add(contractor.getName());
+        }
+        model.put("contractorNames", names);
         return model;
     }
 
