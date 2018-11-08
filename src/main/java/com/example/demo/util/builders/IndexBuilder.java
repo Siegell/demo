@@ -1,4 +1,4 @@
-package com.example.demo.util.Modelers;
+package com.example.demo.util.builders;
 
 import com.example.demo.domain.Contract;
 import com.example.demo.domain.Contractor;

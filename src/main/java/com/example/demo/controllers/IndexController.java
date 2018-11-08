@@ -1,12 +1,11 @@
 package com.example.demo.controllers;
 
 import com.example.demo.domain.Contract;
-import com.example.demo.domain.Contractor;
 import com.example.demo.repositories.ContractorsRepository;
 import com.example.demo.repositories.ContractsRepository;
 import com.example.demo.repositories.StagesRepository;
 import com.example.demo.util.ContractsExporter;
-import com.example.demo.util.Modelers.IndexBuilder;
+import com.example.demo.util.builders.IndexBuilder;
 import com.example.demo.validators.ContractsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
