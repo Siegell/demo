@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.domain.Contractor;
 import com.example.demo.repositories.ContractorsRepository;
+import com.example.demo.util.builders.ContractorsBuilder;
 import com.example.demo.validators.ContractorsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,8 @@ public class ContractorsController {
     private ContractorsRepository contractorsRepository;
     @Autowired
     private ContractorsValidator contractorsValidator;
+    @Autowired
+    private ContractorsBuilder contractorsBuilder;
 
     public ContractorsController(ContractorsRepository contractorsRepository, ContractorsValidator contractorsValidator) {
         this.contractorsRepository = contractorsRepository;
@@ -33,35 +36,18 @@ public class ContractorsController {
     @GetMapping("{contractorID}/edit/{from}")
     public ModelAndView editForm(@PathVariable Long contractorID, @PathVariable String from) {
         Contractor contractor = contractorsRepository.findById(contractorID).get();
-        Map<String, Object> model = new HashMap<>();
-        model.put("name", (contractor.getName() != null ? contractor.getName() : "name"));
-        model.put("address", (contractor.getAddress() != null ? contractor.getAddress() : "address"));
-        model.put("phone", (contractor.getPhone() != null ? contractor.getPhone() : "phone"));
-        model.put("from", from);
+        Map<String, Object> model = contractorsBuilder.buildModel(contractor, from);
         return new ModelAndView("contractorEdit", model);
     }
 
     @PostMapping("{contractorID}/edit/{from}")
-    public ModelAndView save(@PathVariable Long contractorID, @PathVariable String from, @RequestParam Map<String, String> map) {
-        Contractor contractor = contractorsRepository.findById(contractorID).get();
-        String name = map.getOrDefault("name", "name");
-        if (!Objects.equals(name, ""))
-            contractor.setName(name);
-        String phone = map.getOrDefault("phone", "phone");
-        if (!Objects.equals(phone, ""))
-            contractor.setPhone(phone);
-        String address = map.getOrDefault("address", "address");
-        if (!Objects.equals(address, ""))
-            contractor.setAddress(address);
+    public ModelAndView save(@PathVariable Long contractorID, @PathVariable String from, @ModelAttribute(name = "name") String name, @ModelAttribute(name = "phone") String phone, @ModelAttribute(name = "address") String address) {
+        Contractor contractor = contractorsBuilder.buildContractor(contractorID, name, phone, address);
         if (contractorsValidator.validate(contractor, false)) {
             contractorsRepository.save(contractor);
         } else {
-            Map<String, Object> model = new HashMap<>();
-            model.put("name", (contractor.getName() != null ? contractor.getName() : "name"));
-            model.put("address", (contractor.getAddress() != null ? contractor.getAddress() : "address"));
-            model.put("phone", (contractor.getPhone() != null ? contractor.getPhone() : "phone"));
+            Map<String, Object> model = contractorsBuilder.buildModel(contractor, from);
             model.put("error", "Contractor with this name already exists");
-            model.put("from", from);
             return new ModelAndView("contractorEdit", model);
         }
         if (Objects.equals(from, "index")) {
@@ -76,34 +62,17 @@ public class ContractorsController {
         if (from == null) {
             from = "index";
         }
-        Map<String, Object> model = new HashMap<>();
-        model.put("name", "name");
-        model.put("address", "address");
-        model.put("phone", "phone");
-        model.put("from", from);
+        Map<String, Object> model = contractorsBuilder.buildModel(from);
         return new ModelAndView("contractorsAdd", model);
     }
 
     @PostMapping("/add/{from}")
-    public ModelAndView addSaving(@PathVariable String from, @RequestParam Map<String, String> map) {
-        Contractor contractor = new Contractor();
-        String name = map.getOrDefault("name", "name");
-        if (!Objects.equals(name, ""))
-            contractor.setName(name);
-        String phone = map.getOrDefault("phone", "phone");
-        if (!Objects.equals(phone, ""))
-            contractor.setPhone(phone);
-        String address = map.getOrDefault("address", "address");
-        if (!Objects.equals(address, ""))
-            contractor.setAddress(address);
+    public ModelAndView addSaving(@PathVariable String from, @ModelAttribute(name = "name") String name, @ModelAttribute(name = "phone") String phone, @ModelAttribute(name = "address") String address) {
+        Contractor contractor = contractorsBuilder.buildContractor(name, phone, address);
         if (contractorsValidator.validate(contractor, true)) {
             contractorsRepository.save(contractor);
         } else {
-            Map<String, Object> model = new HashMap<>();
-            model.put("name", "name");
-            model.put("address", "address");
-            model.put("phone", "phone");
-            model.put("from", from);
+            Map<String, Object> model = contractorsBuilder.buildModel(from);
             model.put("error", "Contractor with this name already exists");
             return new ModelAndView("contractorsAdd", model);
         }
