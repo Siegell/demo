@@ -1,15 +1,13 @@
 package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Getter
-@Setter
+@Data
 @Entity
 public class Stage {
     @Id

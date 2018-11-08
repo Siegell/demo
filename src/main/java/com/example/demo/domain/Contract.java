@@ -2,16 +2,14 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 public class Contract {
     @Id
@@ -35,11 +33,11 @@ public class Contract {
     }
 
     public void recalculateCost() {
-        double s = 0;
+        double sum = 0;
         for (Stage stage : stages) {
-            s += stage.getCost();
+            sum += stage.getCost();
         }
-        calculatedTotalCost = s;
+        calculatedTotalCost = sum;
     }
 
     @Override
