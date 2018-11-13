@@ -21,26 +21,92 @@
                     + data +
                     '</td>'
         }
-
-        fetch("/api/stages/{{contractID}}")
-                .then(response => response.json())
-                .then(stages => {
-                    stages.forEach(stage => {
-                        const el = document.createElement('tr');
-                        a = add_table(stage.id);
-                        a += add_table(stage.name);
-                        a += add_table(stage.beginDate);
-                        a += add_table(stage.endDate);
-                        a += add_table(stage.cost);
-                        a += add_table(stage.paymentDate);
-                        a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/edit/">edit</a>');
-                        a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/delete/">delete</a>');
-                        el.innerHTML = a + '</tr>';
-                        document.querySelector('#main_table').append(el)
+        maxPages = 0;
+        function print_table(page, order, direction, size) {
+            document.getElementById('main_table').innerHTML = "<tr>\n" +
+                    "<td>id</td>\n" +
+                    "<td>name</td>\n" +
+                    "<td>begin date</td>\n" +
+                    "<td>end date</td>\n" +
+                    "<td>cost</td>\n" +
+                    "<td>payment date</td>\n" +
+                    "<td>edit</td>\n" +
+                    "<td>delete</td>\n" +
+                    "</tr>"
+            fetch("/api/stages/{{contractID}}?page=" + page +"&order="+order+"&direction="+direction +"&size="+size)
+                    .then(response => response.json())
+                    .then(stages => {
+                        stages.content.forEach(stage => {
+                            const el = document.createElement('tr');
+                            a = add_table(stage.id);
+                            a += add_table(stage.name);
+                            a += add_table(stage.beginDate);
+                            a += add_table(stage.endDate);
+                            a += add_table(stage.cost);
+                            a += add_table(stage.paymentDate);
+                            a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/edit/">edit</a>');
+                            a += add_table('<a href="../../' + {{contractID}} +'/stages/' + stage.id + '/delete/">delete</a>');
+                            el.innerHTML = a + '</tr>';
+                            document.querySelector('#main_table').append(el)
+                        })
+                        maxPages = stages.totalPages - 1;
                     })
-                })
+        }
+        page = 0;
+        order = "id";
+        direction = "asc";
+        size = 10;
+
+        function print_table_right(){
+            if(page<maxPages) page++;
+            print_table(page, order, direction, size);
+        }
+
+        function print_table_left(){
+            if(page>0) page--;
+            print_table(page, order, direction, size);
+        }
+
+        function sorting(){
+            var sort_param;
+            sort_param = document.getElementById("sort_param").value;
+            sort_param = sort_param.split('_');
+            order = sort_param[0];
+            direction = sort_param[1];
+            print_table(page, order, direction, size);
+        }
+
+        function resize(){
+            size = document.getElementById("page_size").value;
+            print_table(page, order, direction, size);
+        }
+        print_table(page, order, direction, size);
     </script>
 </table>
+
+<p>
+    <input type="button" name="left" value="left" onClick="print_table_left()">
+    <input type="button" name="right" value="right" onClick="print_table_right()">
+    <select id="sort_param">
+        <option selected value="id_asc">id asc</option>
+        <option value="id_desc">id desc</option>
+        <option value="name_asc">name asc</option>
+        <option value="name_desc">name desc</option>
+        <option value="beginDate_asc">begin date asc</option>
+        <option value="beginDate_desc">begin date desc</option>
+        <option value="endDate_asc">end date asc</option>
+        <option value="endDate_desc">end date desc</option>
+        <option value="cost_asc">cost asc</option>
+        <option value="cost_desc">cost desc</option>
+        <option value="paymentDate_asc">payment date asc</option>
+        <option value="paymentDate_desc">payment date desc</option>
+    </select>
+    <input type="button" name="sort" value="sort" onClick="sorting()">
+    <label for="page_size">Elements on page:</label>
+    <input type="number" name="page_size" id="page_size" value="10">
+    <input type="button" name="size" value="set" onClick="resize()">
+</p>
+
 <p><a href="/contract/{{contractID}}/stages/add">Add stage</a></p>
 <p><a href="/contract/{{contractID}}/chart">Chart</a></p>
 <p><a href="/">Back</a></p>
