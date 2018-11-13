@@ -6,7 +6,7 @@ function add_table(data) {
 
 maxPages = 0;
 
-function print_table(page) {
+function print_table(page, order, direction) {
     document.getElementById('main_table').innerHTML = "<tr>\n" +
         "<td>export</td>\n" +
         "<td>id</td>\n" +
@@ -21,7 +21,7 @@ function print_table(page) {
         "<td>edit</td>\n" +
         "<td>delete</td>\n" +
         "</tr>";
-    fetch("/api/contracts?page=" + page)
+    fetch("/api/contracts?page=" + page +"&order="+order+"&direction="+direction)
         .then(response => response.json())
         .then(contracts => {
             contracts.content.forEach(contract => {
@@ -46,15 +46,27 @@ function print_table(page) {
 }
 
 page = 0;
+order = "id";
+direction = "asc";
+
 function print_table_right(){
     if(page<maxPages) page++;
-    print_table(page);
+    print_table(page, order, direction);
 }
 
 function print_table_left(){
     if(page>0) page--;
-    print_table(page);
+    print_table(page, order, direction);
 }
 
-print_table(0);
+function sorting(){
+    var sort_param;
+    sort_param = document.getElementById("sort_param").value;
+    sort_param = sort_param.split('_');
+    order = sort_param[0];
+    direction = sort_param[1];
+    print_table(page, order, direction);
+}
+
+print_table(page, order, direction);
 

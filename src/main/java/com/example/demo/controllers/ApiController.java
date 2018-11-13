@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -30,11 +32,11 @@ public class ApiController {
 
     @GetMapping("/contracts")
     public Iterable<Contract> getContracts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
-        Sort sort = Sort.by(order);
-        if(direction == "asc"){
-            sort.ascending();
+        Sort sort;
+        if(Objects.equals(direction, "asc")){
+            sort = Sort.by(order).ascending();
         } else {
-            sort.descending();
+            sort = Sort.by(order).descending();
         }
         Page<Contract> contracts = contractsRepository.findAll(PageRequest.of(page, size, sort));
         return contracts;

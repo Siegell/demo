@@ -12,6 +12,11 @@
     <p>
         <input type="button" name="left" value="left" onClick="print_table_left()">
         <input type="button" name="right" value="right" onClick="print_table_right()">
+        <select id="sort_param">
+            <option selected value="id_asc">id asc</option>
+            <option value="id_desc">id desc</option>
+        </select>
+        <input type="button" name="sort" value="sort" onClick="sorting()">
     </p>
 
     <p><label><input type="radio" name="exportType" value="CSV" checked>Export to CSV</label></p>
