@@ -41,7 +41,7 @@ function print_table(page, order, direction, size) {
                 el.innerHTML = a + '</tr>';
                 document.querySelector('#main_table').append(el);
             })
-            maxPages = contracts.totalPages;
+            maxPages = contracts.totalPages - 1;
         })
 }
 

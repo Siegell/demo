@@ -5,16 +5,26 @@
 </head>
 <body>
 <table id="main_table" border='1' width="70%">
-    <tr>
-        <td>id</td>
-        <td>name</td>
-        <td>address</td>
-        <td>phone</td>
-        <td>edit</td>
-        <td>delete</td>
-    </tr>
     <script type="text/javascript" src="../js/contractors.js"></script>
 </table>
+<p>
+    <input type="button" name="left" value="left" onClick="print_table_left()">
+    <input type="button" name="right" value="right" onClick="print_table_right()">
+    <select id="sort_param">
+        <option selected value="id_asc">id asc</option>
+        <option value="id_desc">id desc</option>
+        <option value="name_asc">name asc</option>
+        <option value="name_desc">name desc</option>
+        <option value="address_asc">address asc</option>
+        <option value="address_desc">address desc</option>
+        <option value="phone_asc">phone asc</option>
+        <option value="phone_desc">phone desc</option>
+    </select>
+    <input type="button" name="sort" value="sort" onClick="sorting()">
+    <label for="page_size">Elements on page:</label>
+    <input type="number" name="page_size" id="page_size" value="10">
+    <input type="button" name="size" value="set" onClick="resize()">
+</p>
 </body>
 
 <p><a href="/contractors/add/index">Add contractor</a></p>

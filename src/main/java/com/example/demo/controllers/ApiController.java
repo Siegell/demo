@@ -46,23 +46,23 @@ public class ApiController {
     public Iterable<Stage> getContracts(@PathVariable long contractID, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
         Contract contract = contractsRepository.findById(contractID).get();
         Sort sort;
-        if(direction == "asc"){
+        if(Objects.equals(direction, "asc")){
             sort = Sort.by(order).ascending();
         } else {
             sort = Sort.by(order).descending();
         }
-        return stagesRepository.findStagesByContract(contract, PageRequest.of(page, size, sort)).getContent();
+        return stagesRepository.findStagesByContract(contract, PageRequest.of(page, size, sort));
     }
 
     @GetMapping("/contractors")
     public Iterable<Contractor> getContractors(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction){
         Sort sort;
-        if(direction == "asc"){
+        if(Objects.equals(direction, "asc")){
             sort = Sort.by(order).ascending();
         } else {
             sort = Sort.by(order).descending();
         }
         Page<Contractor> contractors = contractorsRepository.findAll(PageRequest.of(page, size, sort));
-        return contractors.getContent();
+        return contractors;
     }
 }
