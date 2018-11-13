@@ -29,7 +29,7 @@ public class ApiController {
     }
 
     @GetMapping("/contracts")
-    public Iterable<Contract> getContracts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
+    public Iterable<Contract> getContracts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
         Sort sort = Sort.by(order);
         if(direction == "asc"){
             sort.ascending();
@@ -37,11 +37,11 @@ public class ApiController {
             sort.descending();
         }
         Page<Contract> contracts = contractsRepository.findAll(PageRequest.of(page, size, sort));
-        return contracts.getContent();
+        return contracts;
     }
 
     @GetMapping("/stages/{contractID}")
-    public Iterable<Stage> getContracts(@PathVariable long contractID, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
+    public Iterable<Stage> getContracts(@PathVariable long contractID, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction) {
         Contract contract = contractsRepository.findById(contractID).get();
         Sort sort = Sort.by(order);
         if(direction == "asc"){
@@ -53,7 +53,7 @@ public class ApiController {
     }
 
     @GetMapping("/contractors")
-    public Iterable<Contractor> getContractors(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction){
+    public Iterable<Contractor> getContractors(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction){
         Sort sort = Sort.by(order);
         if(direction == "asc"){
             sort.ascending();

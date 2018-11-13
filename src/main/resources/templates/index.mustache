@@ -6,22 +6,13 @@
 <body>
 <form action="/export" method="get">
     <table id="main_table" border='1' width="70%">
-        <tr>
-            <td>export</td>
-            <td>id</td>
-            <td>contractor name</td>
-            <td>contract date</td>
-            <td>start date</td>
-            <td>end date</td>
-            <td>expected total cost</td>
-            <td>calculated total cost</td>
-            <td>recalculate total cost</td>
-            <td>stages</td>
-            <td>edit</td>
-            <td>delete</td>
-        </tr>
         <script type="text/javascript" src="js/main.js"></script>
     </table>
+
+    <p>
+        <input type="button" name="left" value="left" onClick="print_table_left()">
+        <input type="button" name="right" value="right" onClick="print_table_right()">
+    </p>
 
     <p><label><input type="radio" name="exportType" value="CSV" checked>Export to CSV</label></p>
     <p><label><input type="radio" name="exportType" value="PDF">Export To PDF</label></p>
