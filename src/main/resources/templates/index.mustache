@@ -15,8 +15,23 @@
         <select id="sort_param">
             <option selected value="id_asc">id asc</option>
             <option value="id_desc">id desc</option>
+            <option value="contractor_asc">contractor name asc</option>
+            <option value="contractor_desc">contractor name desc</option>
+            <option value="contractDate_asc">contract date asc</option>
+            <option value="contractDate_desc">contract date desc</option>
+            <option value="beginDate_asc">start date asc</option>
+            <option value="beginDate_desc">start date desc</option>
+            <option value="endDate_asc">end date asc</option>
+            <option value="endDate_desc">end date desc</option>
+            <option value="expectedTotalCost_asc">expected total cost asc</option>
+            <option value="expectedTotalCost_desc">expected total cost desc</option>
+            <option value="calculatedTotalCost_asc">calculated total cost asc</option>
+            <option value="calculatedTotalCost_desc">calculated total cost desc</option>
         </select>
         <input type="button" name="sort" value="sort" onClick="sorting()">
+        <label for="page_size">Elements on page:</label>
+        <input type="number" name="page_size" id="page_size" value="10">
+        <input type="button" name="size" value="set" onClick="resize()">
     </p>
 
     <p><label><input type="radio" name="exportType" value="CSV" checked>Export to CSV</label></p>
