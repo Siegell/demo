@@ -34,6 +34,16 @@
         <input type="button" name="size" value="set" onClick="resize()">
     </p>
 
+    <p>
+        Filter:
+        <select size="4" multiple name="contractors" id="filterContractor">
+            <option disabled>Select contractors</option>
+            <script type="text/javascript" src="js/mainFilterContractorOptions.js"></script>
+        </select>
+        <input type="button" name="set" value="set" onClick="setFilter()">
+        <input type="button" name="drop" value="drop" onClick="dropFilter()">
+    </p>
+
     <p><label><input type="radio" name="exportType" value="CSV" checked>Export to CSV</label></p>
     <p><label><input type="radio" name="exportType" value="PDF">Export To PDF</label></p>
     <p>

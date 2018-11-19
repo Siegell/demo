@@ -4,9 +4,9 @@ function add_table(data) {
     '</td>'
 }
 
-maxPages = 0;
+var maxPages = 0;
 
-function print_table(page, order, direction, size) {
+function print_table(page, order, direction, size, filter) {
     document.getElementById('main_table').innerHTML = "<tr>\n" +
         "<td>export</td>\n" +
         "<td>id</td>\n" +
@@ -21,7 +21,7 @@ function print_table(page, order, direction, size) {
         "<td>edit</td>\n" +
         "<td>delete</td>\n" +
         "</tr>";
-    fetch("/api/contracts?page=" + page +"&order="+order+"&direction="+direction +"&size="+size)
+    fetch("/api/contracts?page=" + page + "&order=" + order + "&direction=" + direction +"&size=" + size + "&filter=" + filter)
         .then(response => response.json())
         .then(contracts => {
             contracts.content.forEach(contract => {
@@ -45,19 +45,20 @@ function print_table(page, order, direction, size) {
         })
 }
 
-page = 0;
-order = "id";
-direction = "asc";
-size = 10;
+var page = 0;
+var order = "id";
+var direction = "asc";
+var size = 10;
+var filter = "";
 
 function print_table_right(){
     if(page<maxPages) page++;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function print_table_left(){
     if(page>0) page--;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function sorting(){
@@ -66,13 +67,26 @@ function sorting(){
     sort_param = sort_param.split('_');
     order = sort_param[0];
     direction = sort_param[1];
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function resize(){
     size = document.getElementById("page_size").value;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
-print_table(page, order, direction, size);
+function setFilter(){
+    var contractorsSelect = document.getElementById("filterContractor").selectedOptions;
+    for (var i = 0; i < contractorsSelect.length; i++) {
+        filter += ("contractor:" + contractorsSelect[i].label + "*");
+    }
+    print_table(page, order, direction, size, filter);
+}
+
+function dropFilter(){
+    filter = "";
+    print_table(page, order, direction, size, filter);
+}
+
+print_table(page, order, direction, size, filter);
 
