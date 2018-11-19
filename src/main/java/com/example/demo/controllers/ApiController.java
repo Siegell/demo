@@ -38,7 +38,7 @@ public class ApiController {
     }
 
     @GetMapping("/contracts")
-    public Iterable<Contract> getContracts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction, @RequestParam(value = "search", required = false) String search) {
+    public Iterable<Contract> getContracts(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction, @RequestParam(value = "filter", required = false) String filter) {
         Sort sort;
         if (Objects.equals(direction, "asc")) {
             sort = Sort.by(order).ascending();
@@ -46,10 +46,10 @@ public class ApiController {
             sort = Sort.by(order).descending();
         }
         Page<Contract> contracts;
-        if (search != null) {
+        if (filter != null) {
             ContractExpressionsBuilder builder = new ContractExpressionsBuilder();
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\|)", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(search + ",");
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\*)", Pattern.UNICODE_CHARACTER_CLASS);
+            Matcher matcher = pattern.matcher(filter + ",");
             while (matcher.find()) {
                 builder.addPredicate(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
             }
@@ -74,7 +74,7 @@ public class ApiController {
     }
 
     @GetMapping("/contractors")
-    public Iterable<Contractor> getContractors(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction, @RequestParam(value = "search", required = false) String search) {
+    public Iterable<Contractor> getContractors(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "10") int size, @RequestParam(name = "order", defaultValue = "id") String order, @RequestParam(name = "direction", defaultValue = "asc") String direction, @RequestParam(value = "filter", required = false) String filter) {
         Sort sort;
         if (Objects.equals(direction, "asc")) {
             sort = Sort.by(order).ascending();
@@ -82,10 +82,10 @@ public class ApiController {
             sort = Sort.by(order).descending();
         }
         Page<Contractor> contractors;
-        if (search != null) {
+        if (filter != null) {
             ContractorExpressionsBuilder builder = new ContractorExpressionsBuilder();
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\|)", Pattern.UNICODE_CHARACTER_CLASS);
-            Matcher matcher = pattern.matcher(search + ",");
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\*)", Pattern.UNICODE_CHARACTER_CLASS);
+            Matcher matcher = pattern.matcher(filter + ",");
             while (matcher.find()) {
                 builder.addPredicate(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
             }
@@ -95,5 +95,10 @@ public class ApiController {
             contractors = contractorsRepository.findAll(PageRequest.of(page, size, sort));
         }
         return contractors;
+    }
+
+    @GetMapping("/contractors/all")
+    public Iterable<Contractor> getContractorsAll(){
+        return contractorsRepository.findAll();
     }
 }
