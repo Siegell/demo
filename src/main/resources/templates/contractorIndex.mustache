@@ -25,8 +25,16 @@
     <input type="number" name="page_size" id="page_size" value="10">
     <input type="button" name="size" value="set" onClick="resize()">
 </p>
-</body>
+
+<p>
+    Filter:
+    <label for="nameFilter">Name:</label>
+    <input type="text" name="nameFilter" id="nameFilter">
+    <input type="button" name="set" value="set" onClick="setFilter()">
+    <input type="button" name="drop" value="drop" onClick="dropFilter()">
+</p>
 
 <p><a href="/contractors/add/index">Add contractor</a></p>
 <p><a href="/">Back</a></p>
+</body>
 </html>

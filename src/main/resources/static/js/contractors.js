@@ -6,7 +6,7 @@ function add_table(data) {
 
 maxPages = 0;
 
-function print_table(page, order, direction, size) {
+function print_table(page, order, direction, size, filter) {
     document.getElementById('main_table').innerHTML = "<tr>\n" +
         "<td>id</td>\n" +
         "<td>name</td>\n" +
@@ -15,7 +15,8 @@ function print_table(page, order, direction, size) {
         "<td>edit</td>\n" +
         "<td>delete</td>\n" +
         "</tr>";
-    fetch("/api/contractors?page=" + page + "&order=" + order + "&direction=" + direction + "&size=" + size)
+    console.log("/api/contractors?page=" + page + "&order=" + order + "&direction=" + direction + "&size=" + size + "&filter=" + filter);
+    fetch("/api/contractors?page=" + page + "&order=" + order + "&direction=" + direction + "&size=" + size + "&filter=" + filter)
         .then(response => response.json())
         .then(contractors => {
             contractors.content.forEach(contractor => {
@@ -33,19 +34,20 @@ function print_table(page, order, direction, size) {
         })
 }
 
-page = 0;
-order = "id";
-direction = "asc";
-size = 10;
+var page = 0;
+var order = "id";
+var direction = "asc";
+var size = 10;
+var filter = "";
 
 function print_table_right(){
     if(page<maxPages) page++;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function print_table_left(){
     if(page>0) page--;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function sorting(){
@@ -54,12 +56,23 @@ function sorting(){
     sort_param = sort_param.split('_');
     order = sort_param[0];
     direction = sort_param[1];
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
 function resize(){
     size = document.getElementById("page_size").value;
-    print_table(page, order, direction, size);
+    print_table(page, order, direction, size, filter);
 }
 
-print_table(page, order, direction, size);
+function setFilter(){
+    var name = document.getElementById("nameFilter").value;
+    filter += "name:" + name;
+    print_table(page, order, direction, size, filter);
+}
+
+function dropFilter(){
+    filter = "";
+    print_table(page, order, direction, size, filter);
+}
+
+print_table(page, order, direction, size, filter);
