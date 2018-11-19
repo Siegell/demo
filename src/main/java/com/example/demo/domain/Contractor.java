@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -18,6 +19,7 @@ public class Contractor {
     private String phone;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contractor", cascade = CascadeType.REMOVE)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Contract> contracts;
 
 

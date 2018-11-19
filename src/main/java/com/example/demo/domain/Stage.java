@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Stage {
     private Double cost;
     private LocalDate paymentDate;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "contract_id", nullable = false)

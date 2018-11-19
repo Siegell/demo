@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,9 +23,11 @@ public class Contract {
     private Double calculatedTotalCost = 0D;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contract", cascade = CascadeType.REMOVE)
     @JsonIgnore
+    @ToString.Exclude
     private Set<Stage> stages;
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "contractor_id")
+    @ToString.Exclude
     private Contractor contractor;
 
     @JsonGetter("contractor")
