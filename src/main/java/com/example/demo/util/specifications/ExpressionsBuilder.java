@@ -37,4 +37,8 @@ public interface ExpressionsBuilder {
     }
 
     BooleanExpression parsePredicate(Predicate predicate);
+
+    default void clean(){
+        predicates.clear();
+    }
 }

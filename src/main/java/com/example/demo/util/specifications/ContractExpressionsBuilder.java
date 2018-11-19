@@ -10,7 +10,7 @@ public class ContractExpressionsBuilder implements ExpressionsBuilder {
         QContract contract = QContract.contract;
         switch (predicate.getKey()){
             case "contractor":{
-                return contract.contractor.name.like("%"+predicate.getValue()+"%");
+                return contract.contractor.name.eq(predicate.getValue());
             }
             case "beginDate":{
                 switch (predicate.getOperation()){

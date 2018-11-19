@@ -8,7 +8,7 @@ public class ContractorExpressionsBuilder implements ExpressionsBuilder{
         QContractor contractor = QContractor.contractor;
         switch (predicate.getKey()){
             case "name":{
-                return contractor.name.like(predicate.getValue());
+                return contractor.name.like("%" + predicate.getValue() + "%");
             }
         }
         return null;

@@ -46,7 +46,7 @@ public class ApiController {
             sort = Sort.by(order).descending();
         }
         Page<Contract> contracts;
-        if (filter != null) {
+        if (!Objects.equals(filter, "")) {
             ContractExpressionsBuilder builder = new ContractExpressionsBuilder();
             Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\*)", Pattern.UNICODE_CHARACTER_CLASS);
             Matcher matcher = pattern.matcher(filter + ",");
@@ -54,6 +54,7 @@ public class ApiController {
                 builder.addPredicate(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
             }
             BooleanExpression spec = builder.build();
+            builder.clean();
             contracts = contractsRepository.findAll(spec, PageRequest.of(page, size, sort));
         } else {
             contracts = contractsRepository.findAll(PageRequest.of(page, size, sort));
@@ -82,7 +83,7 @@ public class ApiController {
             sort = Sort.by(order).descending();
         }
         Page<Contractor> contractors;
-        if (filter != null) {
+        if (!Objects.equals(filter, "")) {
             ContractorExpressionsBuilder builder = new ContractorExpressionsBuilder();
             Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([\\w-]+)(,|\\*)", Pattern.UNICODE_CHARACTER_CLASS);
             Matcher matcher = pattern.matcher(filter + ",");
@@ -90,6 +91,7 @@ public class ApiController {
                 builder.addPredicate(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
             }
             BooleanExpression spec = builder.build();
+            builder.clean();
             contractors = contractorsRepository.findAll(spec, PageRequest.of(page, size, sort));
         } else {
             contractors = contractorsRepository.findAll(PageRequest.of(page, size, sort));
