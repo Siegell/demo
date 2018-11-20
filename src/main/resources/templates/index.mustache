@@ -35,11 +35,24 @@
     </p>
 
     <p>
-        Filter:
-        <select size="4" multiple name="contractors" id="filterContractor">
-            <option disabled>Select contractors</option>
-            <script type="text/javascript" src="js/mainFilterContractorOptions.js"></script>
-        </select>
+        Contractor:
+            <select size="4" multiple name="contractors" id="filterContractor">
+                <option disabled>Select contractors</option>
+                <script type="text/javascript" src="js/mainFilterContractorOptions.js"></script>
+            </select>
+        <label for="filterContractDateFrom">Contract Date From:</label>
+        <input type="date" name="filterContractDateFrom" id="filterContractDateFrom"/>
+        <label for="filterContractDateTo">Contract Date To:</label>
+        <input type="date" name="filterContractDateTo" id="filterContractDateTo"/>
+        <label for="filterBeginDateFrom">Begin Date From:</label>
+        <input type="date" name="filterBeginDateFrom" id="filterBeginDateFrom"/>
+        <label for="filterBeginDateTo">Begin Date To:</label>
+        <input type="date" name="filterBeginDateTo" id="filterBeginDateTo"/>
+        <label for="filterEndDateFrom">End Date From:</label>
+        <input type="date" name="filterEndDateFrom" id="filterEndDateFrom"/>
+        <label for="filterEndDateTo">End Date To:</label>
+        <input type="date" name="filterEndDateTo" id="filterEndDateTo"/>
+
         <input type="button" name="set" value="set" onClick="setFilter()">
         <input type="button" name="drop" value="drop" onClick="dropFilter()">
     </p>

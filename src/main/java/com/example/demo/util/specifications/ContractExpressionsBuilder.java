@@ -18,10 +18,10 @@ public class ContractExpressionsBuilder implements ExpressionsBuilder {
                         return contract.beginDate.eq(LocalDate.parse(predicate.getValue()));
                     }
                     case ">":{
-                        return contract.beginDate.after(LocalDate.parse(predicate.getValue()));
+                        return contract.beginDate.after(LocalDate.parse(predicate.getValue())).or(contract.beginDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                     case "<":{
-                        return contract.beginDate.before(LocalDate.parse(predicate.getValue()));
+                        return contract.beginDate.before(LocalDate.parse(predicate.getValue())).or(contract.beginDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                 }
                 break;
@@ -32,10 +32,10 @@ public class ContractExpressionsBuilder implements ExpressionsBuilder {
                         return contract.endDate.eq(LocalDate.parse(predicate.getValue()));
                     }
                     case ">":{
-                        return contract.endDate.after(LocalDate.parse(predicate.getValue()));
+                        return contract.endDate.after(LocalDate.parse(predicate.getValue())).or(contract.endDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                     case "<":{
-                        return contract.endDate.before(LocalDate.parse(predicate.getValue()));
+                        return contract.endDate.before(LocalDate.parse(predicate.getValue())).or(contract.endDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                 }
                 break;
@@ -46,10 +46,10 @@ public class ContractExpressionsBuilder implements ExpressionsBuilder {
                         return contract.contractDate.eq(LocalDate.parse(predicate.getValue()));
                     }
                     case ">":{
-                        return contract.contractDate.after(LocalDate.parse(predicate.getValue()));
+                        return contract.contractDate.after(LocalDate.parse(predicate.getValue())).or(contract.contractDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                     case "<":{
-                        return contract.contractDate.before(LocalDate.parse(predicate.getValue()));
+                        return contract.contractDate.before(LocalDate.parse(predicate.getValue())).or(contract.contractDate.eq(LocalDate.parse(predicate.getValue())));
                     }
                 }
                 break;

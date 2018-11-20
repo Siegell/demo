@@ -21,6 +21,7 @@ function print_table(page, order, direction, size, filter) {
         "<td>edit</td>\n" +
         "<td>delete</td>\n" +
         "</tr>";
+    console.log("/api/contracts?page=" + page + "&order=" + order + "&direction=" + direction +"&size=" + size + "&filter=" + filter);
     fetch("/api/contracts?page=" + page + "&order=" + order + "&direction=" + direction +"&size=" + size + "&filter=" + filter)
         .then(response => response.json())
         .then(contracts => {
@@ -76,6 +77,31 @@ function resize(){
 }
 
 function setFilter(){
+    var contractDateFrom = document.getElementById("filterContractDateFrom").value;
+    if (contractDateFrom) {
+        filter += "contractDate>" + contractDateFrom + ",";
+    }
+    var contractDateTo = document.getElementById("filterContractDateTo").value;
+    if (contractDateTo) {
+        filter += "contractDate<" + contractDateTo + ",";
+    }
+    var beginDateFrom = document.getElementById("filterBeginDateFrom").value;
+    if (beginDateFrom) {
+        filter += "beginDate>" + beginDateFrom + ",";
+    }
+    var beginDateTo = document.getElementById("filterBeginDateTo").value;
+    if (beginDateTo) {
+        filter += "beginDate<" + beginDateTo + ",";
+    }
+    var endDateFrom = document.getElementById("filterEndDateFrom").value;
+    if (endDateFrom) {
+        filter += "endDate>" + endDateFrom + ",";
+    }
+    var endDateTo = document.getElementById("filterEndDateTo").value;
+    if (endDateTo) {
+        filter += "endDate<" + endDateTo + ",";
+    }
+    filter +="*";
     var contractorsSelect = document.getElementById("filterContractor").selectedOptions;
     for (var i = 0; i < contractorsSelect.length; i++) {
         filter += ("contractor:" + contractorsSelect[i].label + "*");
